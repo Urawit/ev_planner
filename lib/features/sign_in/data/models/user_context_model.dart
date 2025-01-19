@@ -13,8 +13,6 @@ class UserContextModel implements UserContextEntity{
   @override
   final String? username;
 
-  //TODO vehicleModel have to have Model
-  // contain -> modelname brandid brandname
   @override
   final String? vehicleModel;
   

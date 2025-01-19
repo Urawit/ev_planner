@@ -1,10 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:ev_planner/shared/exception/exception.dart';
 
-import '../entities/session_entity.dart';
+import '../entities/entities.dart';
 
 abstract class SignInIRepository {
-  Future<Either<Exception, SessionEntity>> signIn({
-    required String email,
-    required String password
+  Future<Either<AnyException, SessionEntity>> signIn({
+    required SignInInputEntity signInInput
   });
 }

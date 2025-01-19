@@ -1,5 +1,5 @@
-import '../../domain/entities/session_entity.dart';
+import '../../domain/domain.dart';
 
 abstract class SignInIDataSource {
-  Future<SessionEntity> signIn({required String email, required String password});
+  Future<SessionEntity> signIn({required SignInInputEntity signInInput});
 }
