@@ -1,5 +1,5 @@
 abstract class UserContextEntity {
-  const UserContextEntity ({
+  const UserContextEntity({
     this.username,
     this.email,
     this.vehicleModel,

@@ -10,9 +10,8 @@ class SignInUseCase {
 
   final SignInIRepository _repository;
 
-  Future<Either<AnyException, SessionEntity>> call({
-    required SignInInputEntity signInInput
-  }) {
+  Future<Either<AnyException, SessionEntity>> call(
+      {required SignInInputEntity signInInput}) {
     return _repository.signIn(signInInput: signInInput);
   }
 }

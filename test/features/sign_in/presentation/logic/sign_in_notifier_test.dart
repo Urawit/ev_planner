@@ -21,7 +21,7 @@ void main() {
   late SignInUseCaseMock signInUseCaseMock;
   late SessionModelMock sessionModelMock;
   late ProviderContainer container;
-  
+
   setUp(() {
     signInUseCaseMock = SignInUseCaseMock();
     sessionModelMock = SessionModelMock();
@@ -37,50 +37,54 @@ void main() {
 
   group('SignInNotifer', () {
     test(
-      'Given User '
-      'When sign in sucessfully'
-      'Then get state success', () async {
-        // mock usecase to get SessionModel
-        when(() => signInUseCaseMock.call(signInInput: any(named: 'signInInput'),)).thenAnswer((_) async => Right(sessionModelMock));
-        final notifier = container.read(signInProvider.notifier);
+        'Given User '
+        'When sign in sucessfully'
+        'Then get state success', () async {
+      // mock usecase to get SessionModel
+      when(() => signInUseCaseMock.call(
+            signInInput: any(named: 'signInInput'),
+          )).thenAnswer((_) async => Right(sessionModelMock));
+      final notifier = container.read(signInProvider.notifier);
 
-        final List<SignInState> signInState = [];
-        container.listen(signInProvider, (_, state) => signInState.add(state), fireImmediately: true);
+      final List<SignInState> signInState = [];
+      container.listen(signInProvider, (_, state) => signInState.add(state),
+          fireImmediately: true);
 
-        await notifier.signIn(email: email, password: password);
+      await notifier.signIn(email: email, password: password);
 
-        final expectedStates = [
-          const SignInState.initial(),
-          const SignInState.loading(),
-          SignInState.success(data: sessionModelMock)
-        ];
+      final expectedStates = [
+        const SignInState.initial(),
+        const SignInState.loading(),
+        SignInState.success(data: sessionModelMock)
+      ];
 
-        expect(signInState, expectedStates);
-      }
-    );
+      expect(signInState, expectedStates);
+    });
 
     test(
-      'Given User '
-      'When sign in and got error'
-      'Then get state error', () async {
-        const AnyException exception = AnyException(ErrorMessageModel());
-        // mock usecase to get SessionModel
-        when(() => signInUseCaseMock.call(signInInput: any(named: 'signInInput'),)).thenAnswer((_) async => const Left(exception));
-        final notifier = container.read(signInProvider.notifier);
+        'Given User '
+        'When sign in and got error'
+        'Then get state error', () async {
+      const AnyException exception = AnyException(ErrorMessageModel());
+      // mock usecase to get SessionModel
+      when(() => signInUseCaseMock.call(
+            signInInput: any(named: 'signInInput'),
+          )).thenAnswer((_) async => const Left(exception));
+      final notifier = container.read(signInProvider.notifier);
 
-        final List<SignInState> signInState = [];
-        container.listen(signInProvider, (_, state) => signInState.add(state), fireImmediately: true);
+      final List<SignInState> signInState = [];
+      container.listen(signInProvider, (_, state) => signInState.add(state),
+          fireImmediately: true);
 
-        await notifier.signIn(email: email, password: password);
+      await notifier.signIn(email: email, password: password);
 
-        final expectedStates = [
-          const SignInState.initial(),
-          const SignInState.loading(),
-          const SignInState.error(exception)
-        ];
+      final expectedStates = [
+        const SignInState.initial(),
+        const SignInState.loading(),
+        const SignInState.error(exception)
+      ];
 
-        expect(signInState, expectedStates);
-      }
-    );
+      expect(signInState, expectedStates);
+    });
   });
 }

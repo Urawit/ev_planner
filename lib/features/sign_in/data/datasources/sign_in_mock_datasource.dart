@@ -9,13 +9,12 @@ class SignInMockDataSource implements SignInIDataSource {
   @override
   Future<SessionEntity> signIn({required SignInInputEntity signInInput}) async {
     if (signInInput.email == 'admin') {
-      return const SessionModel(userContext: UserContextModel(
-      email: 'email',
-      username: 'admin',
-      vehicleModel: 'vehicleModel'
-    ));
+      return const SessionModel(
+          userContext: UserContextModel(
+              email: 'email', username: 'admin', vehicleModel: 'vehicleModel'));
     } else {
-      throw InvalidInputException(errorCode: '400', errorMessage: 'InvalidInputException');
+      throw InvalidInputException(
+          errorCode: '400', errorMessage: 'InvalidInputException');
     }
   }
 }

@@ -1,12 +1,12 @@
 import '../../domain/entities/entities.dart';
 
-class UserContextModel implements UserContextEntity{
+class UserContextModel implements UserContextEntity {
   const UserContextModel({
     this.email,
     this.username,
     this.vehicleModel,
   });
-  
+
   @override
   final String? email;
 
@@ -15,5 +15,4 @@ class UserContextModel implements UserContextEntity{
 
   @override
   final String? vehicleModel;
-  
 }
