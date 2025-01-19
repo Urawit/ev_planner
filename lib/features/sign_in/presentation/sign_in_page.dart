@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/theme/ev_design_system.dart';
+
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //TODO make String Constant
             Padding(
-              padding: EdgeInsets.only(bottom: 40),
+              padding: const EdgeInsets.only(bottom: 40),
               child: Text('Welcome to EV Planner',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                  style: EVDesignSystem.textStyles.headline1),
             ),
-            SizedBox(
+            const SizedBox(
                 width: 300,
                 child: TextField(
                   obscureText: true,
@@ -25,8 +27,8 @@ class SignInPage extends StatelessWidget {
                     labelText: 'Email',
                   ),
                 )),
-            SizedBox(height: 20),
-            SizedBox(
+            const SizedBox(height: 20),
+            const SizedBox(
                 width: 300,
                 child: TextField(
                   obscureText: true,
