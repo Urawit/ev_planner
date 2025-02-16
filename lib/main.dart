@@ -1,9 +1,10 @@
 import 'package:ev_planner/core/routes/go_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,5 +18,5 @@ class MyApp extends StatelessWidget {
   }
 }
 
-final GoRouter _router = GoRouter(initialLocation: '/sign-in', routes: GoRoutes.routes);
-
+final GoRouter _router =
+    GoRouter(initialLocation: '/sign-in', routes: GoRoutes.routes);
