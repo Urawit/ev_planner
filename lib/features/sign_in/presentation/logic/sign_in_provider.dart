@@ -11,11 +11,11 @@ final signInProvider =
     NotifierProvider.autoDispose<SignInNotifier, SignInState>(
         SignInNotifier.new);
 
-final obscurePasswordProvider = StateProvider<bool>((ref) => true);
+final signInObscurePasswordProvider = StateProvider<bool>((ref) => true);
 
-final emailErrorProvider = StateProvider<String?>((ref) => null);
+final signInEmailErrorProvider = StateProvider<String?>((ref) => null);
 
-final passwordErrorProvider = StateProvider<String?>((ref) => null);
+final signInPasswordErrorProvider = StateProvider<String?>((ref) => null);
 
 final signInRepositoryProvider = Provider.autoDispose<SignInIRepository>((ref) {
   // TODO change to datasource

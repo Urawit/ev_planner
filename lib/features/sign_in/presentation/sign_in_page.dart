@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
 import 'logic/sign_in_provider.dart';
@@ -29,18 +30,18 @@ class SignInPageState extends ConsumerState<SignInPage> {
     bool isValid = true;
 
     if (email.isEmpty) {
-      ref.read(emailErrorProvider.notifier).state = "Please enter your email";
+      ref.read(signInEmailErrorProvider.notifier).state = "Please enter your email";
       isValid = false;
     } else {
-      ref.read(emailErrorProvider.notifier).state = null;
+      ref.read(signInEmailErrorProvider.notifier).state = null;
     }
 
     if (password.isEmpty) {
-      ref.read(passwordErrorProvider.notifier).state =
+      ref.read(signInPasswordErrorProvider.notifier).state =
           "Please enter your password";
       isValid = false;
     } else {
-      ref.read(passwordErrorProvider.notifier).state = null;
+      ref.read(signInPasswordErrorProvider.notifier).state = null;
     }
 
     if (isValid) {
@@ -53,16 +54,16 @@ class SignInPageState extends ConsumerState<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isObscure = ref.watch(obscurePasswordProvider);
-    final isEmailError = ref.watch(emailErrorProvider);
-    final isPasswordError = ref.watch(passwordErrorProvider);
+    final isObscure = ref.watch(signInObscurePasswordProvider);
+    final isEmailError = ref.watch(signInEmailErrorProvider);
+    final isPasswordError = ref.watch(signInPasswordErrorProvider);
 
-    //TODO validation with ref.listen and navigation
     ref.listen(signInProvider, (previous, next) {
       next.whenOrNull(
         success: (_) {
-          Navigator.pushReplacementNamed(context, '/home');
+          context.go('/navigation');
         },
+        //TODO Handle error
         error: (error) {
           // if (error is InvalidCredentialsException) {
           // } else if (error is UserNotFoundException) {
@@ -89,7 +90,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
                 width: 327,
                 child: TextField(
                     onChanged: (_) {
-                      ref.read(emailErrorProvider.notifier).state = null;
+                      ref.read(signInEmailErrorProvider.notifier).state = null;
                     },
                     controller: emailController,
                     decoration: InputDecoration(
@@ -107,7 +108,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
               width: 327,
               child: TextField(
                 onChanged: (_) {
-                  ref.read(passwordErrorProvider.notifier).state = null;
+                  ref.read(signInPasswordErrorProvider.notifier).state = null;
                 },
                 controller: passwordController,
                 obscureText: isObscure,
@@ -124,7 +125,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
                       isObscure ? Icons.visibility_off : Icons.visibility,
                     ),
                     onPressed: () {
-                      ref.read(obscurePasswordProvider.notifier).state =
+                      ref.read(signInObscurePasswordProvider.notifier).state =
                           !isObscure;
                     },
                   ),
@@ -138,7 +139,14 @@ class SignInPageState extends ConsumerState<SignInPage> {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                        style: null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFEB7A29), // Button color
+                          foregroundColor: Colors.white, // Text color
+                          padding: const EdgeInsets.symmetric(vertical: 16), // Optional: Adjust padding
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8), // Optional: Rounded corners
+                          ),
+                        ),
                         onPressed: validate,
                         child: const Text('Login')),
                   ),
@@ -147,11 +155,11 @@ class SignInPageState extends ConsumerState<SignInPage> {
             ),
             const SizedBox(height: 24),
             GestureDetector(
-              onTap: () {},
+              onTap: () => context.go('/register'),
               child: const Text(
                 "New here? SIGN UP",
                 style: TextStyle(
-                  color: Colors.blue, // Make it look like a link
+                  color: Colors.grey,
                   fontWeight: FontWeight.bold,
                 ),
               ),

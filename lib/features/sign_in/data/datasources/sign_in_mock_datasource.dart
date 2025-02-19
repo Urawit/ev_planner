@@ -13,7 +13,7 @@ class SignInMockDataSource implements SignInIDataSource {
           userContext: UserContextModel(
               email: 'email', username: 'admin', vehicleModel: 'vehicleModel'));
     } else {
-      throw InvalidInputException(
+      throw InvalidPasswordException(
           errorCode: '400', errorMessage: 'InvalidInputException');
     }
   }

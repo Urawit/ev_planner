@@ -21,8 +21,15 @@ class ServerException extends AnyException {
   String get name => "ServerException";
 }
 
-class InvalidInputException extends AnyException {
-  InvalidInputException({String? errorCode, String? errorMessage}) : super(ErrorMessageModel(errorCode: errorCode, errorMessage: errorMessage));
+class InvalidPasswordException extends AnyException {
+  InvalidPasswordException({String? errorCode, String? errorMessage}) : super(ErrorMessageModel(errorCode: errorCode, errorMessage: errorMessage));
   @override
-  String get name => "InvalidInputException";
+  String get name => "InvalidPasswordException";
+}
+
+// TODO Implement this to signin datasource
+class UserNotFoundException extends AnyException {
+  UserNotFoundException({String? errorCode, String? errorMessage}) : super(ErrorMessageModel(errorCode: errorCode, errorMessage: errorMessage));
+  @override
+  String get name => "UserNotFoundException";
 }
