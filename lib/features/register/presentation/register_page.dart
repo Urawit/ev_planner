@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
+import '../../../shared/widgets/widgets.dart';
 import 'logic/register_provider.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -133,15 +133,6 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isPasswordObscure = ref.watch(registerObscurePasswordProvider);
-    final isConfirmPasswordObscure =
-        ref.watch(registerObscureConfirmPasswordProvider);
-
-    final isDisplayNameError = ref.watch(registerDisplayNameErrorProvider);
-    final isEmailError = ref.watch(registerEmailErrorProvider);
-    final isPasswordError = ref.watch(registerPasswordErrorProvider);
-    final isConfirmPasswordError =
-        ref.watch(registerConfirmPasswordErrorProvider);
     final isCarBrandError = ref.watch(registerCarBrandErrorProvider);
     final isCarModelError = ref.watch(registerCarModelErrorProvider);
 
@@ -181,133 +172,28 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                     style: EVDesignSystem.textStyles.normal1),
               ),
             ),
-            SizedBox(
-                width: 327,
-                child: TextField(
-                    onChanged: (_) {
-                      ref
-                          .read(registerDisplayNameErrorProvider.notifier)
-                          .state = null;
-                    },
-                    controller: displayNameController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: isDisplayNameError != null
-                              ? Colors.red
-                              : Colors.grey,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: EVDesignSystem.colors.orange,
-                        ),
-                      ),
-                      labelText: 'Display Name',
-                      labelStyle: const TextStyle(color: Colors.black),
-                      errorText: isDisplayNameError,
-                    ))),
+            CustomTextField(
+                controller: displayNameController,
+                label: 'Display Name',
+                errorProvider: registerDisplayNameErrorProvider),
             const SizedBox(height: 24),
-            SizedBox(
-                width: 327,
-                child: TextField(
-                    onChanged: (_) {
-                      ref.read(registerEmailErrorProvider.notifier).state =
-                          null;
-                    },
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color:
-                              isEmailError != null ? Colors.red : Colors.grey,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: EVDesignSystem.colors.orange,
-                        ),
-                      ),
-                      labelText: 'Email',
-                      labelStyle: const TextStyle(color: Colors.black),
-                      errorText: isEmailError,
-                    ))),
+            CustomTextField(
+                controller: emailController,
+                label: 'Email',
+                errorProvider: registerEmailErrorProvider),
             const SizedBox(height: 24),
-            SizedBox(
-              width: 327,
-              child: TextField(
-                onChanged: (_) {
-                  ref.read(registerPasswordErrorProvider.notifier).state = null;
-                },
-                controller: passwordController,
-                obscureText: isPasswordObscure,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: isPasswordError != null ? Colors.red : Colors.grey,
-                    ),
-                  ),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(),
-                  ),
-                  errorText: isPasswordError,
-                  labelText: 'Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isPasswordObscure
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      ref.read(registerObscurePasswordProvider.notifier).state =
-                          !isPasswordObscure;
-                    },
-                  ),
-                  labelStyle: const TextStyle(color: Colors.black),
-                ),
-              ),
+            PasswordTextField(
+              controller: passwordController,
+              label: 'Password',
+              errorProvider: registerPasswordErrorProvider,
+              obscureProvider: registerObscurePasswordProvider,
             ),
             const SizedBox(height: 24),
-            SizedBox(
-              width: 327,
-              child: TextField(
-                onChanged: (_) {
-                  ref
-                      .read(registerConfirmPasswordErrorProvider.notifier)
-                      .state = null;
-                },
-                controller: confirmPasswordController,
-                obscureText: isConfirmPasswordObscure,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: isConfirmPasswordError != null
-                          ? Colors.red
-                          : Colors.grey,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: EVDesignSystem.colors.orange,
-                    ),
-                  ),
-                  errorText: isConfirmPasswordError,
-                  labelText: 'Confirm Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isConfirmPasswordObscure
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      ref
-                          .read(registerObscureConfirmPasswordProvider.notifier)
-                          .state = !isConfirmPasswordObscure;
-                    },
-                  ),
-                  labelStyle: const TextStyle(color: Colors.black),
-                ),
-              ),
+            PasswordTextField(
+              controller: confirmPasswordController,
+              label: 'Confirm Password',
+              errorProvider: registerConfirmPasswordErrorProvider,
+              obscureProvider: registerObscureConfirmPasswordProvider,
             ),
             const SizedBox(height: 24),
             SizedBox(

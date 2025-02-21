@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
+import '../../../shared/widgets/widgets.dart';
 import 'logic/sign_in_provider.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
@@ -55,10 +56,6 @@ class SignInPageState extends ConsumerState<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isObscure = ref.watch(signInObscurePasswordProvider);
-    final isEmailError = ref.watch(signInEmailErrorProvider);
-    final isPasswordError = ref.watch(signInPasswordErrorProvider);
-
     ref.listen(signInProvider, (previous, next) {
       next.whenOrNull(
         success: (_) {
@@ -87,63 +84,16 @@ class SignInPageState extends ConsumerState<SignInPage> {
                     style: EVDesignSystem.textStyles.headline1),
               ),
             ),
-            SizedBox(
-                width: 327,
-                child: TextField(
-                    onChanged: (_) {
-                      ref.read(signInEmailErrorProvider.notifier).state = null;
-                    },
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color:
-                              isEmailError != null ? Colors.red : Colors.grey,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: EVDesignSystem.colors.orange,
-                        ),
-                      ),
-                      labelText: 'Email',
-                      labelStyle: const TextStyle(color: Colors.black),
-                      errorText: isEmailError,
-                    ))),
+            CustomTextField(
+                controller: emailController,
+                label: 'Email',
+                errorProvider: signInEmailErrorProvider),
             const SizedBox(height: 24),
-            SizedBox(
-              width: 327,
-              child: TextField(
-                onChanged: (_) {
-                  ref.read(signInPasswordErrorProvider.notifier).state = null;
-                },
-                controller: passwordController,
-                obscureText: isObscure,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: isPasswordError != null ? Colors.red : Colors.grey,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: EVDesignSystem.colors.orange,
-                    ),
-                  ),
-                  errorText: isPasswordError,
-                  labelText: 'Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      isObscure ? Icons.visibility_off : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      ref.read(signInObscurePasswordProvider.notifier).state =
-                          !isObscure;
-                    },
-                  ),
-                  labelStyle: const TextStyle(color: Colors.black),
-                ),
-              ),
+            PasswordTextField(
+              controller: passwordController,
+              label: 'Password',
+              errorProvider: signInPasswordErrorProvider,
+              obscureProvider: signInObscurePasswordProvider,
             ),
             const SizedBox(height: 24),
             Padding(
