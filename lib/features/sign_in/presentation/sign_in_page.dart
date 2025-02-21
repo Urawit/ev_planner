@@ -30,7 +30,8 @@ class SignInPageState extends ConsumerState<SignInPage> {
     bool isValid = true;
 
     if (email.isEmpty) {
-      ref.read(signInEmailErrorProvider.notifier).state = "Please enter your email";
+      ref.read(signInEmailErrorProvider.notifier).state =
+          "Please enter your email";
       isValid = false;
     } else {
       ref.read(signInEmailErrorProvider.notifier).state = null;
@@ -100,7 +101,13 @@ class SignInPageState extends ConsumerState<SignInPage> {
                               isEmailError != null ? Colors.red : Colors.grey,
                         ),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: EVDesignSystem.colors.orange,
+                        ),
+                      ),
                       labelText: 'Email',
+                      labelStyle: const TextStyle(color: Colors.black),
                       errorText: isEmailError,
                     ))),
             const SizedBox(height: 24),
@@ -118,6 +125,11 @@ class SignInPageState extends ConsumerState<SignInPage> {
                       color: isPasswordError != null ? Colors.red : Colors.grey,
                     ),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: EVDesignSystem.colors.orange,
+                    ),
+                  ),
                   errorText: isPasswordError,
                   labelText: 'Password',
                   suffixIcon: IconButton(
@@ -129,6 +141,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
                           !isObscure;
                     },
                   ),
+                  labelStyle: const TextStyle(color: Colors.black),
                 ),
               ),
             ),
@@ -140,14 +153,14 @@ class SignInPageState extends ConsumerState<SignInPage> {
                   Expanded(
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFEB7A29), // Button color
-                          foregroundColor: Colors.white, // Text color
-                          padding: const EdgeInsets.symmetric(vertical: 16), // Optional: Adjust padding
+                          backgroundColor: const Color(0xFFEB7A29),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8), // Optional: Rounded corners
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: validate,
+                        onPressed: nullChecking,
                         child: const Text('Login')),
                   ),
                 ],

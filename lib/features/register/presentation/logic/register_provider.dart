@@ -12,3 +12,5 @@ final registerEmailErrorProvider = StateProvider<String?>((ref) => null);
 
 final registerPasswordErrorProvider = StateProvider<String?>((ref) => null);
 
+final registerConfirmPasswordErrorProvider = StateProvider<String?>((ref) => null);
+

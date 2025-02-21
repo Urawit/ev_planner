@@ -16,11 +16,15 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   final TextEditingController displayNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
 
   @override
   void dispose() {
+    displayNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -56,7 +60,8 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final isPasswordObscure = ref.watch(registerObscurePasswordProvider);
-    final isConfirmPasswordObscure = ref.watch(registerObscureConfirmPasswordProvider);
+    final isConfirmPasswordObscure =
+        ref.watch(registerObscureConfirmPasswordProvider);
 
     final isDisplayNameError = ref.watch(registerDisplayNameErrorProvider);
     final isEmailError = ref.watch(registerEmailErrorProvider);
@@ -85,106 +90,164 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: const EdgeInsets.only(left: 27, bottom: 40),
+                padding: const EdgeInsets.only(left: 27, bottom: 8),
                 child: Text('Sign up !',
                     style: EVDesignSystem.textStyles.headline1),
               ),
             ),
-             SizedBox(
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 27, bottom: 40),
+                child: Text('Create and account to get started',
+                    style: EVDesignSystem.textStyles.normal1),
+              ),
+            ),
+            SizedBox(
                 width: 327,
                 child: TextField(
                     onChanged: (_) {
-                      ref.read(registerDisplayNameErrorProvider.notifier).state = null;
+                      ref
+                          .read(registerDisplayNameErrorProvider.notifier)
+                          .state = null;
                     },
                     controller: displayNameController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color:
-                              isDisplayNameError != null ? Colors.red : Colors.grey,
+                          color: isDisplayNameError != null
+                              ? Colors.red
+                              : Colors.grey,
                         ),
                       ),
-                      labelText: 'Display Nmae',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: EVDesignSystem.colors.orange,
+                        ),
+                      ),
+                      labelText: 'Display Name',
+                      labelStyle: const TextStyle(color: Colors.black),
                       errorText: isDisplayNameError,
                     ))),
-            // SizedBox(
-            //     width: 327,
-            //     child: TextField(
-            //         onChanged: (_) {
-            //           ref.read(signInEmailErrorProvider.notifier).state = null;
-            //         },
-            //         controller: emailController,
-            //         decoration: InputDecoration(
-            //           border: OutlineInputBorder(
-            //             borderSide: BorderSide(
-            //               color:
-            //                   isEmailError != null ? Colors.red : Colors.grey,
-            //             ),
-            //           ),
-            //           labelText: 'Email',
-            //           errorText: isEmailError,
-            //         ))),
-            // const SizedBox(height: 24),
-            // SizedBox(
-            //   width: 327,
-            //   child: TextField(
-            //     onChanged: (_) {
-            //       ref.read(signInPasswordErrorProvider.notifier).state = null;
-            //     },
-            //     controller: passwordController,
-            //     obscureText: isObscure,
-            //     decoration: InputDecoration(
-            //       border: OutlineInputBorder(
-            //         borderSide: BorderSide(
-            //           color: isPasswordError != null ? Colors.red : Colors.grey,
-            //         ),
-            //       ),
-            //       errorText: isPasswordError,
-            //       labelText: 'Password',
-            //       suffixIcon: IconButton(
-            //         icon: Icon(
-            //           isObscure ? Icons.visibility_off : Icons.visibility,
-            //         ),
-            //         onPressed: () {
-            //           ref.read(signInObscurePasswordProvider.notifier).state =
-            //               !isObscure;
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 24),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 24),
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: ElevatedButton(
-            //             style: ElevatedButton.styleFrom(
-            //               backgroundColor: Color(0xFFEB7A29), // Button color
-            //               foregroundColor: Colors.white, // Text color
-            //               padding: const EdgeInsets.symmetric(vertical: 16), // Optional: Adjust padding
-            //               shape: RoundedRectangleBorder(
-            //                 borderRadius: BorderRadius.circular(8), // Optional: Rounded corners
-            //               ),
-            //             ),
-            //             onPressed: validate,
-            //             child: const Text('Login')),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // const SizedBox(height: 24),
-            // GestureDetector(
-            //   onTap: () => context.go('/register'),
-            //   child: const Text(
-            //     "New here? SIGN UP",
-            //     style: TextStyle(
-            //       color: Colors.grey,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // )
+            const SizedBox(height: 24),
+            SizedBox(
+                width: 327,
+                child: TextField(
+                    onChanged: (_) {
+                      ref.read(registerEmailErrorProvider.notifier).state =
+                          null;
+                    },
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color:
+                              isEmailError != null ? Colors.red : Colors.grey,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: EVDesignSystem.colors.orange,
+                        ),
+                      ),
+                      labelText: 'Email',
+                      labelStyle: const TextStyle(color: Colors.black),
+                      errorText: isEmailError,
+                    ))),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: 327,
+              child: TextField(
+                onChanged: (_) {
+                  ref.read(registerPasswordErrorProvider.notifier).state = null;
+                },
+                controller: passwordController,
+                obscureText: isConfirmPasswordObscure,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: isPasswordError != null ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+l                    ),
+                  ),
+                  errorText: isPasswordError,
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isPasswordObscure
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      ref.read(registerObscurePasswordProvider.notifier).state =
+                          !isPasswordObscure;
+                    },
+                  ),
+                  labelStyle: const TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: 327,
+              child: TextField(
+                onChanged: (_) {
+                  ref.read(registerConfirmPasswordErrorProvider.notifier).state = null;
+                },
+                controller: confirmPasswordController,
+                obscureText: isConfirmPasswordObscure,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: isConfirmPasswordError != null ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: EVDesignSystem.colors.orange,
+                    ),
+                  ),
+                  errorText: isConfirmPasswordError,
+                  labelText: 'Confirm Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      isConfirmPasswordObscure
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      ref.read(registerObscureConfirmPasswordProvider.notifier).state =
+                          !isConfirmPasswordObscure;
+                    },
+                  ),
+                  labelStyle: const TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFEB7A29),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: nullChecking,
+                        child: const Text('Register')),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

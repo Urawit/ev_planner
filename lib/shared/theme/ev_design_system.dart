@@ -1,5 +1,7 @@
-import 'package:ev_planner/shared/theme/text_style/ev_text_style.dart';
+import 'color/ev_color.dart';
+import 'text_style/ev_text_style.dart';
 
 class EVDesignSystem {
   static const textStyles = EVTextStyle();
+  static const colors = EVColor();
 }
