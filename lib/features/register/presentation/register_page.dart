@@ -16,8 +16,46 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   final TextEditingController displayNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
+  final TextEditingController searchBrandController = TextEditingController();
+  final TextEditingController searchModelController = TextEditingController();
+
+  String? selectedBrand;
+  String? selectedModel;
+
+  // Car Brands & Models Data
+  final Map<String, List<String>> carData = {
+    "Toyota": ["Camry", "Corolla", "RAV4"],
+    "Honda": ["Civic", "Accord", "CR-V"],
+    "Ford": ["Focus", "Mustang", "F-150"],
+    "BMW": ["X5", "M3", "320i"],
+  };
+
+  List<String> get filteredBrands {
+    if (searchBrandController.text.isEmpty) {
+      return carData.keys.toList();
+    }
+    return carData.keys
+        .where((brand) => brand
+            .toLowerCase()
+            .contains(searchBrandController.text.toLowerCase()))
+        .toList();
+  }
+
+  List<String> get filteredModels {
+    if (selectedBrand == null) return [];
+    List<String> models = carData[selectedBrand] ?? [];
+    if (searchModelController.text.isEmpty) {
+      return models;
+    }
+    return models
+        .where((model) => model
+            .toLowerCase()
+            .contains(searchModelController.text.toLowerCase()))
+        .toList();
+  }
 
   @override
   void dispose() {
@@ -28,34 +66,70 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     super.dispose();
   }
 
-  // void validate() {
-  //   final email = emailController.text.trim();
-  //   final password = passwordController.text.trim();
+  void nullChecking() {
+    final displayName = displayNameController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
 
-  //   bool isValid = true;
+    bool isValid = true;
 
-  //   if (email.isEmpty) {
-  //     ref.read(signInEmailErrorProvider.notifier).state = "Please enter your email";
-  //     isValid = false;
-  //   } else {
-  //     ref.read(signInEmailErrorProvider.notifier).state = null;
-  //   }
+    if (displayName.isEmpty) {
+      ref.read(registerDisplayNameErrorProvider.notifier).state =
+          "Please enter your display name";
+      isValid = false;
+    } else {
+      ref.read(registerDisplayNameErrorProvider.notifier).state = null;
+    }
 
-  //   if (password.isEmpty) {
-  //     ref.read(signInPasswordErrorProvider.notifier).state =
-  //         "Please enter your password";
-  //     isValid = false;
-  //   } else {
-  //     ref.read(signInPasswordErrorProvider.notifier).state = null;
-  //   }
+    if (email.isEmpty) {
+      ref.read(registerEmailErrorProvider.notifier).state =
+          "Please enter your email";
+      isValid = false;
+    } else {
+      ref.read(registerEmailErrorProvider.notifier).state = null;
+    }
 
-  //   if (isValid) {
-  //     ref.read(signInProvider.notifier).signIn(
-  //           email: email,
-  //           password: password,
-  //         );
-  //   }
-  // }
+    if (password.isEmpty) {
+      ref.read(registerPasswordErrorProvider.notifier).state =
+          "Please enter your password";
+      isValid = false;
+    } else {
+      ref.read(registerPasswordErrorProvider.notifier).state = null;
+    }
+
+    if (confirmPassword.isEmpty) {
+      ref.read(registerConfirmPasswordErrorProvider.notifier).state =
+          "Please type your password again";
+      isValid = false;
+    } else {
+      ref.read(registerConfirmPasswordErrorProvider.notifier).state = null;
+    }
+
+    if (selectedBrand == null) {
+      ref.read(registerCarBrandErrorProvider.notifier).state =
+          "Please select your car brand";
+      isValid = false;
+    } else {
+      ref.read(registerCarBrandErrorProvider.notifier).state = null;
+    }
+
+    if (selectedModel == null) {
+      ref.read(registerCarModelErrorProvider.notifier).state =
+          "Please select your car model";
+      isValid = false;
+    } else {
+      ref.read(registerCarModelErrorProvider.notifier).state = null;
+    }
+
+    // TODO implement
+    // if (isValid) {
+    //   ref.read(signInProvider.notifier).signIn(
+    //         email: email,
+    //         password: password,
+    //       );
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +140,10 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     final isDisplayNameError = ref.watch(registerDisplayNameErrorProvider);
     final isEmailError = ref.watch(registerEmailErrorProvider);
     final isPasswordError = ref.watch(registerPasswordErrorProvider);
+    final isConfirmPasswordError =
+        ref.watch(registerConfirmPasswordErrorProvider);
+    final isCarBrandError = ref.watch(registerCarBrandErrorProvider);
+    final isCarModelError = ref.watch(registerCarModelErrorProvider);
 
     // ref.listen(signInProvider, (previous, next) {
     //   next.whenOrNull(
@@ -162,16 +240,15 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                   ref.read(registerPasswordErrorProvider.notifier).state = null;
                 },
                 controller: passwordController,
-                obscureText: isConfirmPasswordObscure,
+                obscureText: isPasswordObscure,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: isPasswordError != null ? Colors.red : Colors.grey,
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-l                    ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(),
                   ),
                   errorText: isPasswordError,
                   labelText: 'Password',
@@ -195,14 +272,18 @@ l                    ),
               width: 327,
               child: TextField(
                 onChanged: (_) {
-                  ref.read(registerConfirmPasswordErrorProvider.notifier).state = null;
+                  ref
+                      .read(registerConfirmPasswordErrorProvider.notifier)
+                      .state = null;
                 },
                 controller: confirmPasswordController,
                 obscureText: isConfirmPasswordObscure,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: isConfirmPasswordError != null ? Colors.red : Colors.grey,
+                      color: isConfirmPasswordError != null
+                          ? Colors.red
+                          : Colors.grey,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -219,14 +300,89 @@ l                    ),
                           : Icons.visibility,
                     ),
                     onPressed: () {
-                      ref.read(registerObscureConfirmPasswordProvider.notifier).state =
-                          !isConfirmPasswordObscure;
+                      ref
+                          .read(registerObscureConfirmPasswordProvider.notifier)
+                          .state = !isConfirmPasswordObscure;
                     },
                   ),
                   labelStyle: const TextStyle(color: Colors.black),
                 ),
               ),
             ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: 327,
+              child: DropdownButtonFormField<String>(
+                value: selectedBrand,
+                items: filteredBrands.map((brand) {
+                  return DropdownMenuItem(
+                    value: brand,
+                    child: Text(brand),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedBrand = value;
+                    selectedModel = null;
+                    ref.read(registerCarBrandErrorProvider.notifier).state =
+                        null;
+                  });
+                },
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: EVDesignSystem.colors.orange,
+                    ),
+                  ),
+                  labelText: "Select Your Car Brand",
+                  errorText: isCarBrandError,
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: isCarBrandError != null ? Colors.red : Colors.grey,
+                    ),
+                  ),
+                  labelStyle: const TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+            if (selectedBrand != null) ...[
+              SizedBox(
+                width: 327,
+                child: DropdownButtonFormField<String>(
+                  value: selectedModel,
+                  items: filteredModels.map((model) {
+                    return DropdownMenuItem(
+                      value: model,
+                      child: Text(model),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedModel = value;
+                      ref.read(registerCarModelErrorProvider.notifier).state =
+                          null;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: EVDesignSystem.colors.orange,
+                      ),
+                    ),
+                    labelText: "Select Your Car Model",
+                    errorText: isCarModelError,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color:
+                            isCarModelError != null ? Colors.red : Colors.grey,
+                      ),
+                    ),
+                    labelStyle: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),

@@ -23,7 +23,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
     super.dispose();
   }
 
-  void validate() {
+  void nullChecking() {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 

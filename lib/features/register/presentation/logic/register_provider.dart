@@ -14,3 +14,7 @@ final registerPasswordErrorProvider = StateProvider<String?>((ref) => null);
 
 final registerConfirmPasswordErrorProvider = StateProvider<String?>((ref) => null);
 
+final registerCarBrandErrorProvider = StateProvider<String?>((ref) => null);
+
+final registerCarModelErrorProvider = StateProvider<String?>((ref) => null);
+
