@@ -1,4 +1,4 @@
-import '../../domain/entities/sign_in_entity.dart';
+import '../../domain/entities/sign_in_input_entity.dart';
 
 class SignInInputModel implements SignInInputEntity {
   const SignInInputModel({required this.email, required this.password});

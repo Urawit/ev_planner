@@ -2,17 +2,21 @@ import '../../domain/entities/entities.dart';
 
 class UserContextModel implements UserContextEntity {
   const UserContextModel({
-    this.email,
-    this.username,
-    this.vehicleModel,
+    required this.email,
+    required this.displayName,
+    required this.carBrand,
+    required this.carModel,
   });
 
   @override
-  final String? email;
+  final String email;
 
   @override
-  final String? username;
+  final String displayName;
 
   @override
-  final String? vehicleModel;
+  final String carBrand;
+
+  @override
+  final String carModel;
 }
