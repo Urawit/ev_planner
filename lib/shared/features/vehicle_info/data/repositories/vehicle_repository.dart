@@ -9,10 +9,9 @@ class VehicleRepository implements VehicleIRepository {
   final VehicleIDataSource remoteDataSource;
 
   @override
-  Future<Either<AnyException, List<VehicleEntity>>> register() async {
+  Future<Either<AnyException, List<VehicleEntity>>> getVehicle() async {
     try {
-      final result =
-          await remoteDataSource.getVehicle();
+      final result = await remoteDataSource.getVehicle();
       return Right(result);
     } on AnyException catch (e) {
       return Left(e);

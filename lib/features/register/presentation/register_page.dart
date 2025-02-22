@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../shared/features/vehicle_info/logic/vehicle_provider.dart';
 import '../../../shared/theme/ev_design_system.dart';
 import '../../../shared/widgets/widgets.dart';
 import '../data/models/register_input_model.dart';
@@ -26,36 +27,13 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   String? selectedBrand;
   String? selectedModel;
 
-  // TODO make data domain logic
-  final Map<String, List<String>> carData = {
-    "Toyota": ["Camry", "Corolla", "RAV4"],
-    "Honda": ["Civic", "Accord", "CR-V"],
-    "Ford": ["Focus", "Mustang", "F-150"],
-    "BMW": ["X5", "M3", "320i"],
-  };
+  @override
+  void initState() {
+    super.initState();
 
-  List<String> get filteredBrands {
-    if (searchBrandController.text.isEmpty) {
-      return carData.keys.toList();
-    }
-    return carData.keys
-        .where((brand) => brand
-            .toLowerCase()
-            .contains(searchBrandController.text.toLowerCase()))
-        .toList();
-  }
-
-  List<String> get filteredModels {
-    if (selectedBrand == null) return [];
-    List<String> models = carData[selectedBrand] ?? [];
-    if (searchModelController.text.isEmpty) {
-      return models;
-    }
-    return models
-        .where((model) => model
-            .toLowerCase()
-            .contains(searchModelController.text.toLowerCase()))
-        .toList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(vehicleProvider.notifier).getVehicle();
+    });
   }
 
   @override
@@ -142,6 +120,8 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     final isCarBrandError = ref.watch(registerCarBrandErrorProvider);
     final isCarModelError = ref.watch(registerCarModelErrorProvider);
 
+    final vehicleState = ref.watch(vehicleProvider);
+
     // ref.listen(signInProvider, (previous, next) {
     //   next.whenOrNull(
     //     success: (_) {
@@ -206,12 +186,18 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
               width: 327,
               child: DropdownButtonFormField<String>(
                 value: selectedBrand,
-                items: filteredBrands.map((brand) {
-                  return DropdownMenuItem(
-                    value: brand,
-                    child: Text(brand),
-                  );
-                }).toList(),
+                items: vehicleState.when(
+                  data: (vehicleList) {
+                    return vehicleList
+                        .map((vehicle) => DropdownMenuItem<String>(
+                              value: vehicle.carBrand,
+                              child: Text(vehicle.carBrand),
+                            ))
+                        .toList();
+                  },
+                  loading: () => [],
+                  error: (e) => [],
+                ),
                 onChanged: (value) {
                   setState(() {
                     selectedBrand = value;
@@ -222,17 +208,15 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                 },
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: EVDesignSystem.colors.orange,
-                    ),
-                  ),
+                      borderSide:
+                          BorderSide(color: EVDesignSystem.colors.orange)),
                   labelText: "Select Your Car Brand",
                   errorText: isCarBrandError,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: isCarBrandError != null ? Colors.red : Colors.grey,
-                    ),
-                  ),
+                      borderSide: BorderSide(
+                          color: isCarBrandError != null
+                              ? Colors.red
+                              : Colors.grey)),
                   labelStyle: const TextStyle(color: Colors.black),
                 ),
               ),
@@ -243,12 +227,22 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                 width: 327,
                 child: DropdownButtonFormField<String>(
                   value: selectedModel,
-                  items: filteredModels.map((model) {
-                    return DropdownMenuItem(
-                      value: model,
-                      child: Text(model),
-                    );
-                  }).toList(),
+                  items: vehicleState.when(
+                    data: (vehicleList) {
+                      final selectedVehicle = vehicleList.firstWhere(
+                        (vehicle) => vehicle.carBrand == selectedBrand,
+                      );
+                      final modelList = selectedVehicle.carModels;
+                      return modelList
+                          .map((model) => DropdownMenuItem<String>(
+                                value: model,
+                                child: Text(model),
+                              ))
+                          .toList();
+                    },
+                    loading: () => [],
+                    error: (e) => [],
+                  ),
                   onChanged: (value) {
                     setState(() {
                       selectedModel = value;
@@ -258,18 +252,15 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                   },
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: EVDesignSystem.colors.orange,
-                      ),
-                    ),
+                        borderSide:
+                            BorderSide(color: EVDesignSystem.colors.orange)),
                     labelText: "Select Your Car Model",
                     errorText: isCarModelError,
                     border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color:
-                            isCarModelError != null ? Colors.red : Colors.grey,
-                      ),
-                    ),
+                        borderSide: BorderSide(
+                            color: isCarModelError != null
+                                ? Colors.red
+                                : Colors.grey)),
                     labelStyle: const TextStyle(color: Colors.black),
                   ),
                 ),

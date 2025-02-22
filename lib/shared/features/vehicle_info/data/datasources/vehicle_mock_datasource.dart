@@ -2,7 +2,7 @@ import '../../domain/entities/vehicle_entity.dart';
 import '../models/vehicle_model.dart';
 import 'vehicle_idatasource.dart';
 
-class VehicleMockDatasource implements VehicleIDataSource {
+class VehicleMockDataSource implements VehicleIDataSource {
   final Map<String, List<String>> carData = {
     "Toyota": ["Camry", "Corolla", "RAV4"],
     "Honda": ["Civic", "Accord", "CR-V"],
@@ -18,5 +18,3 @@ class VehicleMockDatasource implements VehicleIDataSource {
         .toList();
   }
 }
-
-
