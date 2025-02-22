@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../shared/features/vehicle_info/logic/vehicle_provider.dart';
 import '../../../shared/theme/ev_design_system.dart';
@@ -122,20 +123,20 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
 
     final vehicleState = ref.watch(vehicleProvider);
 
-    // ref.listen(signInProvider, (previous, next) {
-    //   next.whenOrNull(
-    //     success: (_) {
-    //       context.go('/navigation');
-    //     },
-    //     //TODO Handle error
-    //     error: (error) {
-    //       // if (error is InvalidCredentialsException) {
-    //       // } else if (error is UserNotFoundException) {
-    //       // } else if (error is AccountLockedException) {
-    //       // } else {}
-    //     },
-    //   );
-    // });
+    ref.listen(registerProvider, (previous, next) {
+      next.whenOrNull(
+        success: (_) {
+          context.go('/sign-in');
+        },
+        //TODO Handle error
+        error: (error) {
+          // if (error is InvalidCredentialsException) {
+          // } else if (error is UserNotFoundException) {
+          // } else if (error is AccountLockedException) {
+          // } else {}
+        },
+      );
+    });
 
     return Scaffold(
       body: Center(
