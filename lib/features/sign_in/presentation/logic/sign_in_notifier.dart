@@ -6,13 +6,11 @@ class SignInNotifier extends EVNotifier<SignInState> {
     return const SignInState.initial();
   }
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<void> signIn({required SignInInputEntity signInInput}) async {
     state = const SignInState.loading();
 
-    final input = SignInInputModel(email: email, password: password);
-
     final result =
-        await ref.read(signInUseCaseProvider).call(signInInput: input);
+        await ref.read(signInUseCaseProvider).call(signInInput: signInInput);
 
     return result.fold((error) {
       state = SignInState.error(error);

@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:ev_planner/shared/exception/exception.dart';
 
 import '../../domain/domain.dart';
-import '../../domain/irepositories/register_irepository.dart';
 import '../data.dart';
 
 class RegisterRepository implements RegisterIRepository {

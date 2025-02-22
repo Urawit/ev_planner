@@ -1,7 +1,7 @@
-import 'package:ev_planner/features/sign_in/domain/entities/session_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../shared/exception/exception.dart';
+import '../../domain/entities/session_entity.dart';
 
 part 'sign_in_state.freezed.dart';
 

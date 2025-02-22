@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
 import '../../../shared/widgets/widgets.dart';
+import '../data/models/sign_in_input_model.dart';
 import 'logic/sign_in_provider.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
@@ -48,8 +49,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
 
     if (isValid) {
       ref.read(signInProvider.notifier).signIn(
-            email: email,
-            password: password,
+            signInInput: SignInInputModel(email: email, password: password),
           );
     }
   }

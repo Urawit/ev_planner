@@ -11,12 +11,6 @@ final signInProvider =
     NotifierProvider.autoDispose<SignInNotifier, SignInState>(
         SignInNotifier.new);
 
-final signInObscurePasswordProvider = StateProvider<bool>((ref) => true);
-
-final signInEmailErrorProvider = StateProvider<String?>((ref) => null);
-
-final signInPasswordErrorProvider = StateProvider<String?>((ref) => null);
-
 final signInRepositoryProvider = Provider.autoDispose<SignInIRepository>((ref) {
   // TODO change to datasource
   final dataSource = SignInMockDataSource();
@@ -27,3 +21,9 @@ final signInUseCaseProvider = Provider.autoDispose<SignInUseCase>((ref) {
   final repository = ref.watch(signInRepositoryProvider);
   return SignInUseCase(repository: repository);
 });
+
+final signInObscurePasswordProvider = StateProvider<bool>((ref) => true);
+
+final signInEmailErrorProvider = StateProvider<String?>((ref) => null);
+
+final signInPasswordErrorProvider = StateProvider<String?>((ref) => null);

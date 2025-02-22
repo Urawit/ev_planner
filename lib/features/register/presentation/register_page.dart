@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
 import '../../../shared/widgets/widgets.dart';
+import '../data/models/register_input_model.dart';
 import 'logic/register_provider.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -25,7 +26,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
   String? selectedBrand;
   String? selectedModel;
 
-  // Car Brands & Models Data
+  // TODO make data domain logic
   final Map<String, List<String>> carData = {
     "Toyota": ["Camry", "Corolla", "RAV4"],
     "Honda": ["Civic", "Accord", "CR-V"],
@@ -123,12 +124,17 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     }
 
     // TODO implement
-    // if (isValid) {
-    //   ref.read(signInProvider.notifier).signIn(
-    //         email: email,
-    //         password: password,
-    //       );
-    // }
+    if (isValid) {
+      ref.read(registerProvider.notifier).register(
+            registerInput: RegisterInputModel(
+                displayName: displayName,
+                email: email,
+                password: password,
+                confirmPassword: confirmPassword,
+                carBrand: selectedBrand ?? '',
+                carModel: selectedModel ?? ''),
+          );
+    }
   }
 
   @override

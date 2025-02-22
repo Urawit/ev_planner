@@ -4,8 +4,8 @@ import '../../../../shared/exception/exception.dart';
 import '../entities/entities.dart';
 import '../irepositories/register_irepository.dart';
 
-class RegisterUsecase {
-  const RegisterUsecase({
+class RegisterUseCase {
+  const RegisterUseCase({
     required RegisterIRepository repository,
   }) : _repository = repository;
 

@@ -50,7 +50,9 @@ void main() {
       container.listen(signInProvider, (_, state) => signInState.add(state),
           fireImmediately: true);
 
-      await notifier.signIn(email: email, password: password);
+      await notifier.signIn(
+          signInInput:
+              const SignInInputModel(email: email, password: password));
 
       final expectedStates = [
         const SignInState.initial(),
@@ -76,7 +78,9 @@ void main() {
       container.listen(signInProvider, (_, state) => signInState.add(state),
           fireImmediately: true);
 
-      await notifier.signIn(email: email, password: password);
+      await notifier.signIn(
+          signInInput:
+              const SignInInputModel(email: email, password: password));
 
       final expectedStates = [
         const SignInState.initial(),
