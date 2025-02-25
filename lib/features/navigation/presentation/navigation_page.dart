@@ -17,7 +17,10 @@ class NavigationPageState extends ConsumerState<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: GoogleMap(initialCameraPosition: _initialCameraPosition));
+    // return Scaffold(
+    //     body: GoogleMap(initialCameraPosition: _initialCameraPosition));
+    return const Scaffold(
+      body: Text("NAVIGATION PAGE"),
+    );
   }
 }

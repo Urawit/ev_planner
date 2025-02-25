@@ -139,10 +139,11 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     });
 
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 140),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
