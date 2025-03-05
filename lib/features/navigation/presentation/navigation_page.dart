@@ -1,26 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class NavigationPage extends ConsumerStatefulWidget {
+import '../../save/presentation/save_page.dart';
+import '../../setting/presentation/setting_page.dart';
+import 'widgets/widgets.dart';
+
+class NavigationPage extends StatefulWidget {
   const NavigationPage({super.key});
 
   @override
   NavigationPageState createState() => NavigationPageState();
 }
 
-class NavigationPageState extends ConsumerState<NavigationPage> {
-  final CameraPosition _initialCameraPosition = const CameraPosition(
-    target: LatLng(37.7749, -122.4194), // Example: San Francisco
-    zoom: 12.0,
-  );
+class NavigationPageState extends State<NavigationPage> {
+  int currentPageIndex = 0;
+  final List<Widget> _pages = [
+    const NavigationWidget(),
+    const SavePage(),
+    const SettingPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //     body: GoogleMap(initialCameraPosition: _initialCameraPosition));
-    return const Scaffold(
-      body: Text("NAVIGATION PAGE"),
+    return Scaffold(
+      body: _pages[currentPageIndex],
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          if (index != currentPageIndex) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          }
+        },
+        // indicatorColor: Colors.amber,
+        selectedIndex: currentPageIndex,
+        destinations: const <Widget>[
+          NavigationDestination(
+            selectedIcon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.save),
+            icon: Icon(Icons.save_outlined),
+            label: 'Save',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.settings),
+            icon: Icon(Icons.settings_outlined),
+            label: 'Settings',
+          ),
+        ],
+      ),
     );
   }
 }

@@ -118,7 +118,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
             ),
             const SizedBox(height: 24),
             GestureDetector(
-              onTap: () => context.go('/register'),
+              onTap: () => context.push('/register'),
               child: const Text(
                 "New here? SIGN UP",
                 style: TextStyle(

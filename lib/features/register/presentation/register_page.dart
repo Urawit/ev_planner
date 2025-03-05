@@ -139,11 +139,19 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     });
 
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.pop();
+            },
+            padding: const EdgeInsets.only(top: 30)),
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 140),
+            const SizedBox(height: 80),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
