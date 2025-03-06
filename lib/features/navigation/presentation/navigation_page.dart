@@ -37,7 +37,7 @@ class NavigationPageState extends State<NavigationPage> {
           NavigationDestination(
             selectedIcon: Icon(Icons.home),
             icon: Icon(Icons.home_outlined),
-            label: 'Home',
+            label: 'Navigation',
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.save),
