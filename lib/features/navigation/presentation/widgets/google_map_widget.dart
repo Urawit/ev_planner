@@ -16,9 +16,6 @@ class GoogleMapWidget extends ConsumerStatefulWidget {
 class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
   GoogleMapController? _mapController;
   LatLng? _startingLocation;
-  LatLng? _destination;
-  LatLng? _previousStartingLocation;
-  LatLng? _previousDestination;
   String _lastTappedField = "destination";
   final Set<Marker> _markers = {};
 
@@ -59,7 +56,6 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
 
     setState(() {
       _startingLocation = LatLng(position.latitude, position.longitude);
-      _previousStartingLocation = _startingLocation;
       _getAddressFromLatLng(_startingLocation!, _locationDescriptionController);
       _updateMarker("startingLocation", _startingLocation!,
           BitmapDescriptor.hueGreen, "Starting Location");
@@ -111,13 +107,10 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
     setState(() {
       if (_lastTappedField == "starting") {
         _startingLocation = latLng;
-        _previousStartingLocation = latLng;
         _getAddressFromLatLng(latLng, _locationDescriptionController);
         _updateMarker("startingLocation", latLng, BitmapDescriptor.hueGreen,
             "Starting Location");
       } else if (_lastTappedField == "destination") {
-        _destination = latLng;
-        _previousDestination = latLng;
         _getAddressFromLatLng(latLng, _destinationDescriptionController);
         _updateMarker(
             "destination", latLng, BitmapDescriptor.hueRed, "Destination");
