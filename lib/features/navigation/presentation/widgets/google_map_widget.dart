@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
+import 'navigation_input_widget.dart';
+
 class GoogleMapWidget extends ConsumerStatefulWidget {
   const GoogleMapWidget({super.key});
 
@@ -15,6 +17,9 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
   GoogleMapController? _mapController;
   LatLng? _startingLocation;
   LatLng? _destination;
+  LatLng? _previousStartingLocation;
+  LatLng? _previousDestination;
+  String _lastTappedField = "destination";
   final Set<Marker> _markers = {};
 
   final TextEditingController _locationDescriptionController =
@@ -54,16 +59,10 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
 
     setState(() {
       _startingLocation = LatLng(position.latitude, position.longitude);
+      _previousStartingLocation = _startingLocation;
       _getAddressFromLatLng(_startingLocation!, _locationDescriptionController);
-      _markers.add(
-        Marker(
-          markerId: const MarkerId("startingLocation"),
-          position: _startingLocation!,
-          infoWindow: const InfoWindow(title: "Starting Location"),
-          icon:
-              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-        ),
-      );
+      _updateMarker("startingLocation", _startingLocation!,
+          BitmapDescriptor.hueGreen, "Starting Location");
       _moveCameraToLocation(_startingLocation!);
     });
   }
@@ -92,101 +91,79 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
     );
   }
 
+  void _updateMarker(
+      String markerId, LatLng position, double hue, String title) {
+    _markers.removeWhere((marker) => marker.markerId.value == markerId);
+    _markers.add(
+      Marker(
+        markerId: MarkerId(markerId),
+        position: position,
+        infoWindow: InfoWindow(title: title),
+        icon: BitmapDescriptor.defaultMarkerWithHue(hue),
+      ),
+    );
+  }
+
   void _onMapTapped(LatLng latLng) {
+    if (_lastTappedField.isEmpty)
+      return; // Prevent setting a marker if no field is selected
+
     setState(() {
-      if (_startingLocation == null) {
+      if (_lastTappedField == "starting") {
         _startingLocation = latLng;
+        _previousStartingLocation = latLng;
         _getAddressFromLatLng(latLng, _locationDescriptionController);
-        _markers.add(
-          Marker(
-            markerId: const MarkerId("startingLocation"),
-            position: latLng,
-            infoWindow: const InfoWindow(title: "Starting Location"),
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueGreen),
-          ),
-        );
-      } else if (_destination == null) {
+        _updateMarker("startingLocation", latLng, BitmapDescriptor.hueGreen,
+            "Starting Location");
+      } else if (_lastTappedField == "destination") {
         _destination = latLng;
+        _previousDestination = latLng;
         _getAddressFromLatLng(latLng, _destinationDescriptionController);
-        _markers.add(
-          Marker(
-            markerId: const MarkerId("destination"),
-            position: latLng,
-            infoWindow: const InfoWindow(title: "Destination"),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-          ),
-        );
+        _updateMarker(
+            "destination", latLng, BitmapDescriptor.hueRed, "Destination");
       }
+
+      // Reset selection after setting a marker
+      _lastTappedField = "";
     });
   }
 
   void _onStartingLocationTap() {
     setState(() {
-      _startingLocation = null;
-      _markers
-          .removeWhere((marker) => marker.markerId.value == "startingLocation");
-      _locationDescriptionController.clear();
+      _lastTappedField = "starting";
     });
   }
 
   void _onDestinationLocationTap() {
     setState(() {
-      _destination = null;
-      _markers.removeWhere((marker) => marker.markerId.value == "destination");
-      _destinationDescriptionController.clear();
+      _lastTappedField = "destination";
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Map Location Selector")),
-      body: Column(
+      body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: _onStartingLocationTap,
-              child: TextField(
-                controller: _locationDescriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Starting Location Description",
-                  border: OutlineInputBorder(),
-                ),
-                enabled: false,
-              ),
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _startingLocation ?? const LatLng(0, 0),
+              zoom: 12.0,
             ),
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+            },
+            markers: _markers,
+            onTap: _onMapTapped,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: _onDestinationLocationTap,
-              child: TextField(
-                controller: _destinationDescriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Destination Description",
-                  border: OutlineInputBorder(),
-                ),
-                enabled: false,
-              ),
-            ),
-          ),
-          Expanded(
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: _startingLocation ?? const LatLng(0, 0),
-                zoom: 12.0,
-              ),
-              onMapCreated: (GoogleMapController controller) {
-                _mapController = controller;
-              },
-              markers: _markers,
-              onTap: _onMapTapped,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-            ),
+          NavigationInputWidget(
+            onStartingLocationTap: _onStartingLocationTap,
+            onDestinationLocationTap: _onDestinationLocationTap,
+            locationDescriptionController: _locationDescriptionController,
+            destinationDescriptionController: _destinationDescriptionController,
+            lastTappedField: _lastTappedField, // Pass state to UI
           ),
         ],
       ),
