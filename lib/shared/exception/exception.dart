@@ -29,8 +29,8 @@ class InvalidPasswordException extends AnyException {
   String get name => "InvalidPasswordException";
 }
 
-class EmailExistsException extends AnyException {
-  EmailExistsException({String? errorCode, String? errorMessage})
+class EmailExistException extends AnyException {
+  EmailExistException({String? errorCode, String? errorMessage})
       : super(ErrorMessageModel(
             errorCode: errorCode, errorMessage: errorMessage));
   @override

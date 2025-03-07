@@ -127,7 +127,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
           context.go('/sign-in');
         },
         error: (error) {
-          if (error is EmailExistsException) {
+          if (error is EmailExistException) {
             ref.read(registerEmailErrorProvider.notifier).state =
                 error.error.errorMessage;
           }

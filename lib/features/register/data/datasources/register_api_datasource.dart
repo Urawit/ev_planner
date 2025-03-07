@@ -32,7 +32,7 @@ class RegisterApiDataSource implements RegisterIDataSource {
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == 409) {
-        throw EmailExistsException(
+        throw EmailExistException(
             errorMessage: "The email has already been taken.");
       } else {
         throw AnyException(
