@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
+import '../../../shared/widgets/error_popup_widget.dart';
 import '../../../shared/widgets/widgets.dart';
 import '../data/models/sign_in_input_model.dart';
 import 'logic/sign_in_provider.dart';
@@ -61,12 +62,11 @@ class SignInPageState extends ConsumerState<SignInPage> {
         success: (_) {
           context.go('/navigation');
         },
-        //TODO Handle error
         error: (error) {
-          // if (error is InvalidCredentialsException) {
-          // } else if (error is UserNotFoundException) {
-          // } else if (error is AccountLockedException) {
-          // } else {}
+          errorPopupWidget(
+              context: context,
+              errorMessage:
+                  'The sign in feature have failed. Please try again');
         },
       );
     });

@@ -1,5 +1,3 @@
-
-
 import '../error/error_message_model.dart';
 
 class AnyException implements Exception {
@@ -16,20 +14,34 @@ class AnyException implements Exception {
 }
 
 class ServerException extends AnyException {
-  ServerException({String? errorCode, String? errorMessage}) : super(ErrorMessageModel(errorCode: errorCode, errorMessage: errorMessage));
+  ServerException({String? errorCode, String? errorMessage})
+      : super(ErrorMessageModel(
+            errorCode: errorCode, errorMessage: errorMessage));
   @override
   String get name => "ServerException";
 }
 
 class InvalidPasswordException extends AnyException {
-  InvalidPasswordException({String? errorCode, String? errorMessage}) : super(ErrorMessageModel(errorCode: errorCode, errorMessage: errorMessage));
+  InvalidPasswordException({String? errorCode, String? errorMessage})
+      : super(ErrorMessageModel(
+            errorCode: errorCode, errorMessage: errorMessage));
   @override
   String get name => "InvalidPasswordException";
 }
 
+class EmailExistsException extends AnyException {
+  EmailExistsException({String? errorCode, String? errorMessage})
+      : super(ErrorMessageModel(
+            errorCode: errorCode, errorMessage: errorMessage));
+  @override
+  String get name => "EmailExistsException";
+}
+
 // TODO Implement this to signin datasource
 class UserNotFoundException extends AnyException {
-  UserNotFoundException({String? errorCode, String? errorMessage}) : super(ErrorMessageModel(errorCode: errorCode, errorMessage: errorMessage));
+  UserNotFoundException({String? errorCode, String? errorMessage})
+      : super(ErrorMessageModel(
+            errorCode: errorCode, errorMessage: errorMessage));
   @override
   String get name => "UserNotFoundException";
 }

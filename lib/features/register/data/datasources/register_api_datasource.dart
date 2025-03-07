@@ -30,6 +30,14 @@ class RegisterApiDataSource implements RegisterIDataSource {
         throw const AnyException(
             ErrorMessageModel(errorMessage: "Failed to register"));
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 409) {
+        throw EmailExistsException(
+            errorMessage: "The email has already been taken.");
+      } else {
+        throw AnyException(
+            ErrorMessageModel(errorMessage: "Error registering: ${e.message}"));
+      }
     } catch (e) {
       throw AnyException(
           ErrorMessageModel(errorMessage: "Error registering: $e"));

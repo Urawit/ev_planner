@@ -6,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 
 import 'navigation_input_widget.dart';
 
+// TODO: clean code
 class GoogleMapWidget extends ConsumerStatefulWidget {
   const GoogleMapWidget({super.key});
 

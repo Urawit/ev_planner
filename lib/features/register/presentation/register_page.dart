@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../shared/exception/exception.dart';
 import '../../../shared/features/vehicle_info/logic/vehicle_provider.dart';
 import '../../../shared/theme/ev_design_system.dart';
 import '../../../shared/widgets/widgets.dart';
@@ -126,7 +127,10 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
           context.go('/sign-in');
         },
         error: (error) {
-          // Handle error (you can add specific error handling here)
+          if (error is EmailExistsException) {
+            ref.read(registerEmailErrorProvider.notifier).state =
+                error.error.errorMessage;
+          }
         },
       );
     });
