@@ -62,6 +62,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
         success: (_) {
           context.go('/navigation');
         },
+        // TODO: sign in error handling
         error: (error) {
           errorPopupWidget(
               context: context,

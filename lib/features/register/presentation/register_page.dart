@@ -55,6 +55,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
 
     bool isValid = true;
 
+    // TODO: Validation
     if (displayName.isEmpty) {
       ref.read(registerDisplayNameErrorProvider.notifier).state =
           "Please enter your display name";
@@ -124,12 +125,23 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     ref.listen(registerProvider, (previous, next) {
       next.whenOrNull(
         success: (_) {
-          context.go('/sign-in');
+          context.push('/sign-in');
+          showFlushbar(
+            context: context,
+            title: 'Sign Up Successful',
+            message: 'Please sign in to your account',
+            backgroundColor: Colors.green,
+          );
         },
         error: (error) {
           if (error is EmailExistException) {
             ref.read(registerEmailErrorProvider.notifier).state =
                 error.error.errorMessage;
+          } else {
+            errorPopupWidget(
+                context: context,
+                errorMessage:
+                    'The register feature have failed. Please try again');
           }
         },
       );
