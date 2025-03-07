@@ -5,9 +5,7 @@ class RegisterInputModel implements RegisterInputEntity {
     required this.displayName,
     required this.email,
     required this.password,
-    required this.confirmPassword,
-    required this.carBrand,
-    required this.carModel,
+    required this.carModelId,
   });
 
   @override
@@ -17,9 +15,6 @@ class RegisterInputModel implements RegisterInputEntity {
   @override
   final String password;
   @override
-  final String confirmPassword;
   @override
-  final String carBrand;
-  @override
-  final String carModel;
+  final String carModelId;
 }

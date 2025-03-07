@@ -6,8 +6,7 @@ import '../data.dart';
 
 class RegisterApiDataSource implements RegisterIDataSource {
   final Dio dio;
-  final String baseUrl =
-      "http://your-api-url.com/api/register"; 
+  final String baseUrl = "http://10.0.2.2:8080/api/users/signup";
 
   RegisterApiDataSource({Dio? dio}) : dio = dio ?? Dio();
 
@@ -18,18 +17,15 @@ class RegisterApiDataSource implements RegisterIDataSource {
       final response = await dio.post(
         baseUrl,
         data: {
-          'displayName': registerInput.displayName,
+          'username': registerInput.displayName,
           'email': registerInput.email,
           'password': registerInput.password,
-          'confirmPassword': registerInput.confirmPassword,
-          'carBrand': registerInput.carBrand,
-          'carModel': registerInput.carModel,
+          'model_id': registerInput.carModelId,
         },
       );
 
       if (response.statusCode == 200) {
-        final data = response.data;
-        return RegisterResultModel(success: data['success'] as bool);
+        return const RegisterResultModel(success: true);
       } else {
         throw const AnyException(
             ErrorMessageModel(errorMessage: "Failed to register"));

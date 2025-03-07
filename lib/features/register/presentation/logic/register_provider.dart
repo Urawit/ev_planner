@@ -13,8 +13,7 @@ final registerProvider =
 
 final registerRepositoryProvider =
     Provider.autoDispose<RegisterIRepository>((ref) {
-  // TODO change to datasource
-  final dataSource = RegisterMockDataSource();
+  final dataSource = RegisterApiDataSource();
   return RegisterRepository(remoteDataSource: dataSource);
 });
 

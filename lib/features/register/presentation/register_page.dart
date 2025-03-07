@@ -108,9 +108,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                 displayName: displayName,
                 email: email,
                 password: password,
-                confirmPassword: confirmPassword,
-                carBrand: selectedBrand ?? '',
-                carModel: selectedModel ?? ''),
+                carModelId: selectedModel ?? ''),
           );
     }
   }
@@ -240,7 +238,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                       final modelList = selectedVehicle.carModels;
                       return modelList
                           .map((model) => DropdownMenuItem<String>(
-                                value: model.modelName,
+                                value: model.modelId.toString(),
                                 child: Text(model.modelName),
                               ))
                           .toList();
