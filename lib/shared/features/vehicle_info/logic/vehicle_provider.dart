@@ -13,8 +13,7 @@ final vehicleProvider =
 
 final vehicleRepositoryProvider =
     Provider.autoDispose<VehicleIRepository>((ref) {
-  // TODO change to datasource
-  final dataSource = VehicleMockDataSource();
+  final dataSource = VehicleApiDataSource();
   return VehicleRepository(remoteDataSource: dataSource);
 });
 

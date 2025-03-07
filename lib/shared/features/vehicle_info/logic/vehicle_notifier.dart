@@ -6,7 +6,7 @@ class VehicleNotifier extends EVNotifier<VehicleState> {
     return const VehicleState.loading();
   }
 
-  Future<void> getVehicle() async {
+  Future<void> getVehicleList() async {
     state = const VehicleState.loading();
 
     final result = await ref.read(vehicleUseCaseProvider).call();

@@ -33,7 +33,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(vehicleProvider.notifier).getVehicle();
+      ref.read(vehicleProvider.notifier).getVehicleList();
     });
   }
 
@@ -102,7 +102,6 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       ref.read(registerCarModelErrorProvider.notifier).state = null;
     }
 
-    // TODO implement
     if (isValid) {
       ref.read(registerProvider.notifier).register(
             registerInput: RegisterInputModel(
@@ -128,12 +127,8 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
         success: (_) {
           context.go('/sign-in');
         },
-        //TODO Handle error
         error: (error) {
-          // if (error is InvalidCredentialsException) {
-          // } else if (error is UserNotFoundException) {
-          // } else if (error is AccountLockedException) {
-          // } else {}
+          // Handle error (you can add specific error handling here)
         },
       );
     });
@@ -164,7 +159,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left: 27, bottom: 40),
-                child: Text('Create and account to get started',
+                child: Text('Create an account to get started',
                     style: EVDesignSystem.textStyles.normal1),
               ),
             ),
@@ -200,8 +195,8 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                   data: (vehicleList) {
                     return vehicleList
                         .map((vehicle) => DropdownMenuItem<String>(
-                              value: vehicle.carBrand,
-                              child: Text(vehicle.carBrand),
+                              value: vehicle.carBrandName,
+                              child: Text(vehicle.carBrandName),
                             ))
                         .toList();
                   },
@@ -240,13 +235,13 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                   items: vehicleState.when(
                     data: (vehicleList) {
                       final selectedVehicle = vehicleList.firstWhere(
-                        (vehicle) => vehicle.carBrand == selectedBrand,
+                        (vehicle) => vehicle.carBrandName == selectedBrand,
                       );
                       final modelList = selectedVehicle.carModels;
                       return modelList
                           .map((model) => DropdownMenuItem<String>(
-                                value: model,
-                                child: Text(model),
+                                value: model.modelName,
+                                child: Text(model.modelName),
                               ))
                           .toList();
                     },
