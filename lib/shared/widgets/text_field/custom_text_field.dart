@@ -40,6 +40,7 @@ class CustomTextField extends ConsumerWidget {
           labelText: label,
           labelStyle: const TextStyle(color: Colors.black),
           errorText: errorText,
+          errorMaxLines: 2,
         ),
       ),
     );

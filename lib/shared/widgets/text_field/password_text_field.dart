@@ -44,6 +44,7 @@ class PasswordTextField extends ConsumerWidget {
           labelText: label,
           labelStyle: const TextStyle(color: Colors.black),
           errorText: errorText,
+          errorMaxLines: 2,
           suffixIcon: IconButton(
             icon: Icon(
               isObscure ? Icons.visibility_off : Icons.visibility,

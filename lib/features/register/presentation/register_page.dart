@@ -34,6 +34,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      resetAllTextField();
       ref.read(vehicleProvider.notifier).getVehicleList();
     });
   }
@@ -47,18 +48,36 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     super.dispose();
   }
 
-  void nullChecking() {
+  void resetAllTextField() {
+    ref.read(registerDisplayNameErrorProvider.notifier).state = null;
+    ref.read(registerEmailErrorProvider.notifier).state = null;
+    ref.read(registerPasswordErrorProvider.notifier).state = null;
+    ref.read(registerConfirmPasswordErrorProvider.notifier).state = null;
+    ref.read(registerCarBrandErrorProvider.notifier).state = null;
+    ref.read(registerCarModelErrorProvider.notifier).state = null;
+  }
+
+  void validation() {
     final displayName = displayNameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
     final confirmPassword = confirmPasswordController.text.trim();
 
+    final displayNameRegex = RegExp(r'^[a-zA-Z0-9]{8,20}$');
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    final passwordRegex =
+        RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,10}$');
+
     bool isValid = true;
 
-    // TODO: Validation
     if (displayName.isEmpty) {
       ref.read(registerDisplayNameErrorProvider.notifier).state =
           "Please enter your display name";
+      isValid = false;
+    } else if (!displayNameRegex.hasMatch(displayName)) {
+      ref.read(registerDisplayNameErrorProvider.notifier).state =
+          "Display name must be 8-20 characters, no special characters";
       isValid = false;
     } else {
       ref.read(registerDisplayNameErrorProvider.notifier).state = null;
@@ -68,6 +87,10 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       ref.read(registerEmailErrorProvider.notifier).state =
           "Please enter your email";
       isValid = false;
+    } else if (!emailRegex.hasMatch(email)) {
+      ref.read(registerEmailErrorProvider.notifier).state =
+          "Please enter a valid email address";
+      isValid = false;
     } else {
       ref.read(registerEmailErrorProvider.notifier).state = null;
     }
@@ -76,6 +99,10 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       ref.read(registerPasswordErrorProvider.notifier).state =
           "Please enter your password";
       isValid = false;
+    } else if (!passwordRegex.hasMatch(password)) {
+      ref.read(registerPasswordErrorProvider.notifier).state =
+          "Password must be 8-10 characters, include at least one number and one special character";
+      isValid = false;
     } else {
       ref.read(registerPasswordErrorProvider.notifier).state = null;
     }
@@ -83,6 +110,10 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     if (confirmPassword.isEmpty) {
       ref.read(registerConfirmPasswordErrorProvider.notifier).state =
           "Please type your password again";
+      isValid = false;
+    } else if (confirmPassword != password) {
+      ref.read(registerConfirmPasswordErrorProvider.notifier).state =
+          "Passwords do not match";
       isValid = false;
     } else {
       ref.read(registerConfirmPasswordErrorProvider.notifier).state = null;
@@ -300,7 +331,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: nullChecking,
+                        onPressed: validation,
                         child: const Text('Register')),
                   ),
                 ],
