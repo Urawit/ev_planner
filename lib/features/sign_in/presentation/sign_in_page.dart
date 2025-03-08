@@ -26,15 +26,24 @@ class SignInPageState extends ConsumerState<SignInPage> {
     super.dispose();
   }
 
-  void nullChecking() {
+  void validation() {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
+
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+    final passwordRegex =
+        RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,10}$');
 
     bool isValid = true;
 
     if (email.isEmpty) {
       ref.read(signInEmailErrorProvider.notifier).state =
           "Please enter your email";
+      isValid = false;
+    } else if (!emailRegex.hasMatch(email)) {
+      ref.read(signInEmailErrorProvider.notifier).state =
+          "Please enter a valid email address";
       isValid = false;
     } else {
       ref.read(signInEmailErrorProvider.notifier).state = null;
@@ -43,6 +52,10 @@ class SignInPageState extends ConsumerState<SignInPage> {
     if (password.isEmpty) {
       ref.read(signInPasswordErrorProvider.notifier).state =
           "Please enter your password";
+      isValid = false;
+    } else if (!passwordRegex.hasMatch(password)) {
+      ref.read(signInPasswordErrorProvider.notifier).state =
+          "Password must be 8-12 characters, with at least 1 uppercase letter, 1 number, and 1 special character.";
       isValid = false;
     } else {
       ref.read(signInPasswordErrorProvider.notifier).state = null;
@@ -111,7 +124,7 @@ class SignInPageState extends ConsumerState<SignInPage> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onPressed: nullChecking,
+                        onPressed: validation,
                         child: const Text('Login')),
                   ),
                 ],
