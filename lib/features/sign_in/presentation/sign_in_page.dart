@@ -20,10 +20,21 @@ class SignInPageState extends ConsumerState<SignInPage> {
   final TextEditingController passwordController = TextEditingController();
 
   @override
+  void initState() {
+    resetAllTextField;
+    super.initState();
+  }
+
+  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  void resetAllTextField() {
+    ref.read(signInEmailErrorProvider.notifier).state = null;
+    ref.read(signInPasswordErrorProvider.notifier).state = null;
   }
 
   void validation() {

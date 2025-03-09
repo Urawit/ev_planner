@@ -102,8 +102,9 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
   }
 
   void _onMapTapped(LatLng latLng) {
-    if (_lastTappedField.isEmpty)
+    if (_lastTappedField.isEmpty) {
       return; // Prevent setting a marker if no field is selected
+    }
 
     setState(() {
       if (_lastTappedField == "starting") {
@@ -157,7 +158,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
             onDestinationLocationTap: _onDestinationLocationTap,
             locationDescriptionController: _locationDescriptionController,
             destinationDescriptionController: _destinationDescriptionController,
-            lastTappedField: _lastTappedField, // Pass state to UI
+            lastTappedField: _lastTappedField,
           ),
         ],
       ),

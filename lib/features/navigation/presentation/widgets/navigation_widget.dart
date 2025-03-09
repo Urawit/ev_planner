@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'widgets.dart';
 
+// TODO IS THIS STATELESS?
 class NavigationWidget extends StatefulWidget {
   const NavigationWidget({super.key});
 
