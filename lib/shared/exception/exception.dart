@@ -21,14 +21,6 @@ class ServerException extends AnyException {
   String get name => "ServerException";
 }
 
-class InvalidPasswordException extends AnyException {
-  InvalidPasswordException({String? errorCode, String? errorMessage})
-      : super(ErrorMessageModel(
-            errorCode: errorCode, errorMessage: errorMessage));
-  @override
-  String get name => "InvalidPasswordException";
-}
-
 class EmailExistException extends AnyException {
   EmailExistException({String? errorCode, String? errorMessage})
       : super(ErrorMessageModel(
@@ -37,11 +29,20 @@ class EmailExistException extends AnyException {
   String get name => "EmailExistsException";
 }
 
-// TODO Implement this to signin datasource
+//* SignIn
+
 class UserNotFoundException extends AnyException {
   UserNotFoundException({String? errorCode, String? errorMessage})
       : super(ErrorMessageModel(
             errorCode: errorCode, errorMessage: errorMessage));
   @override
   String get name => "UserNotFoundException";
+}
+
+class InvalidPasswordException extends AnyException {
+  InvalidPasswordException({String? errorCode, String? errorMessage})
+      : super(ErrorMessageModel(
+            errorCode: errorCode, errorMessage: errorMessage));
+  @override
+  String get name => "InvalidPasswordException";
 }

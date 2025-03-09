@@ -12,10 +12,11 @@ final signInProvider =
         SignInNotifier.new);
 
 final signInRepositoryProvider = Provider.autoDispose<SignInIRepository>((ref) {
-  // TODO change to datasource
-  final dataSource = SignInMockDataSource();
+  final dataSource = SignInApiDataSource();
   return SignInRepository(remoteDataSource: dataSource);
 });
+
+final userContextProvider = StateProvider<UserContextEntity?>((ref) => null);
 
 final signInUseCaseProvider = Provider.autoDispose<SignInUseCase>((ref) {
   final repository = ref.watch(signInRepositoryProvider);

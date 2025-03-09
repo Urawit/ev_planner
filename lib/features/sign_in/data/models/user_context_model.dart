@@ -1,12 +1,16 @@
 import '../../domain/entities/entities.dart';
+import 'bookmark_model.dart';
 
 class UserContextModel implements UserContextEntity {
-  const UserContextModel({
-    required this.email,
-    required this.displayName,
-    required this.carBrand,
-    required this.carModel,
-  });
+  const UserContextModel(
+      {required this.userId,
+      required this.displayName,
+      required this.email,
+      required this.carModelId,
+      required this.bookmarkList});
+
+  @override
+  final String userId;
 
   @override
   final String email;
@@ -15,8 +19,8 @@ class UserContextModel implements UserContextEntity {
   final String displayName;
 
   @override
-  final String carBrand;
+  final String carModelId;
 
   @override
-  final String carModel;
+  final List<BookmarkModel> bookmarkList;
 }

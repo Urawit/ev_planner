@@ -9,7 +9,7 @@ class SignInRepository implements SignInIRepository {
   final SignInIDataSource remoteDataSource;
 
   @override
-  Future<Either<AnyException, SessionEntity>> signIn(
+  Future<Either<AnyException, UserContextEntity>> signIn(
       {required SignInInputEntity signInInput}) async {
     try {
       final result = await remoteDataSource.signIn(signInInput: signInInput);

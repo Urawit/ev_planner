@@ -20,7 +20,7 @@ mixin _$SignInState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(SessionEntity data) success,
+    required TResult Function(UserContextEntity data) success,
     required TResult Function(AnyException error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$SignInState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(SessionEntity data)? success,
+    TResult? Function(UserContextEntity data)? success,
     TResult? Function(AnyException error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$SignInState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(SessionEntity data)? success,
+    TResult Function(UserContextEntity data)? success,
     TResult Function(AnyException error)? error,
     required TResult orElse(),
   }) =>
@@ -132,7 +132,7 @@ class _$SignInStateInitialImpl extends _SignInStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(SessionEntity data) success,
+    required TResult Function(UserContextEntity data) success,
     required TResult Function(AnyException error) error,
   }) {
     return initial();
@@ -143,7 +143,7 @@ class _$SignInStateInitialImpl extends _SignInStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(SessionEntity data)? success,
+    TResult? Function(UserContextEntity data)? success,
     TResult? Function(AnyException error)? error,
   }) {
     return initial?.call();
@@ -154,7 +154,7 @@ class _$SignInStateInitialImpl extends _SignInStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(SessionEntity data)? success,
+    TResult Function(UserContextEntity data)? success,
     TResult Function(AnyException error)? error,
     required TResult orElse(),
   }) {
@@ -250,7 +250,7 @@ class _$SignInStateLoadingImpl extends _SignInStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(SessionEntity data) success,
+    required TResult Function(UserContextEntity data) success,
     required TResult Function(AnyException error) error,
   }) {
     return loading();
@@ -261,7 +261,7 @@ class _$SignInStateLoadingImpl extends _SignInStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(SessionEntity data)? success,
+    TResult? Function(UserContextEntity data)? success,
     TResult? Function(AnyException error)? error,
   }) {
     return loading?.call();
@@ -272,7 +272,7 @@ class _$SignInStateLoadingImpl extends _SignInStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(SessionEntity data)? success,
+    TResult Function(UserContextEntity data)? success,
     TResult Function(AnyException error)? error,
     required TResult orElse(),
   }) {
@@ -331,7 +331,7 @@ abstract class _$$SignInStateSuccessImplCopyWith<$Res> {
           $Res Function(_$SignInStateSuccessImpl) then) =
       __$$SignInStateSuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({SessionEntity data});
+  $Res call({UserContextEntity data});
 }
 
 /// @nodoc
@@ -353,7 +353,7 @@ class __$$SignInStateSuccessImplCopyWithImpl<$Res>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as SessionEntity,
+              as UserContextEntity,
     ));
   }
 }
@@ -364,7 +364,7 @@ class _$SignInStateSuccessImpl extends _SignInStateSuccess {
   const _$SignInStateSuccessImpl({required this.data}) : super._();
 
   @override
-  final SessionEntity data;
+  final UserContextEntity data;
 
   @override
   String toString() {
@@ -396,7 +396,7 @@ class _$SignInStateSuccessImpl extends _SignInStateSuccess {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(SessionEntity data) success,
+    required TResult Function(UserContextEntity data) success,
     required TResult Function(AnyException error) error,
   }) {
     return success(data);
@@ -407,7 +407,7 @@ class _$SignInStateSuccessImpl extends _SignInStateSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(SessionEntity data)? success,
+    TResult? Function(UserContextEntity data)? success,
     TResult? Function(AnyException error)? error,
   }) {
     return success?.call(data);
@@ -418,7 +418,7 @@ class _$SignInStateSuccessImpl extends _SignInStateSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(SessionEntity data)? success,
+    TResult Function(UserContextEntity data)? success,
     TResult Function(AnyException error)? error,
     required TResult orElse(),
   }) {
@@ -467,11 +467,11 @@ class _$SignInStateSuccessImpl extends _SignInStateSuccess {
 }
 
 abstract class _SignInStateSuccess extends SignInState {
-  const factory _SignInStateSuccess({required final SessionEntity data}) =
+  const factory _SignInStateSuccess({required final UserContextEntity data}) =
       _$SignInStateSuccessImpl;
   const _SignInStateSuccess._() : super._();
 
-  SessionEntity get data;
+  UserContextEntity get data;
 
   /// Create a copy of SignInState
   /// with the given fields replaced by the non-null parameter values.
@@ -551,7 +551,7 @@ class _$SignInStateErrorImpl extends _SignInStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(SessionEntity data) success,
+    required TResult Function(UserContextEntity data) success,
     required TResult Function(AnyException error) error,
   }) {
     return error(this.error);
@@ -562,7 +562,7 @@ class _$SignInStateErrorImpl extends _SignInStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(SessionEntity data)? success,
+    TResult? Function(UserContextEntity data)? success,
     TResult? Function(AnyException error)? error,
   }) {
     return error?.call(this.error);
@@ -573,7 +573,7 @@ class _$SignInStateErrorImpl extends _SignInStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(SessionEntity data)? success,
+    TResult Function(UserContextEntity data)? success,
     TResult Function(AnyException error)? error,
     required TResult orElse(),
   }) {

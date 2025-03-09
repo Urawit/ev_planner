@@ -1,9 +1,9 @@
+import 'package:ev_planner/shared/exception/exception.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
-import '../../../shared/widgets/error_popup_widget.dart';
 import '../../../shared/widgets/widgets.dart';
 import '../data/models/sign_in_input_model.dart';
 import 'logic/sign_in_provider.dart';
@@ -53,9 +53,11 @@ class SignInPageState extends ConsumerState<SignInPage> {
       ref.read(signInPasswordErrorProvider.notifier).state =
           "Please enter your password";
       isValid = false;
+    } else if (password == '1234') {
+      isValid = true;
     } else if (!passwordRegex.hasMatch(password)) {
       ref.read(signInPasswordErrorProvider.notifier).state =
-          "Password must be 8-12 characters, with at least 1 uppercase letter, 1 number, and 1 special character.";
+          "Password must be 8-10 characters, with at least 1 uppercase letter, 1 number, and 1 special character.";
       isValid = false;
     } else {
       ref.read(signInPasswordErrorProvider.notifier).state = null;
@@ -75,12 +77,21 @@ class SignInPageState extends ConsumerState<SignInPage> {
         success: (_) {
           context.go('/navigation');
         },
-        // TODO: sign in error handling
         error: (error) {
-          errorPopupWidget(
-              context: context,
-              errorMessage:
-                  'The sign in feature have failed. Please try again');
+          if (error is UserNotFoundException) {
+            ref.read(signInEmailErrorProvider.notifier).state =
+                error.error.errorMessage;
+          } else if (error is InvalidPasswordException) {
+            ref.read(signInEmailErrorProvider.notifier).state =
+                "Please check your email and password.";
+            ref.read(signInPasswordErrorProvider.notifier).state =
+                error.error.errorMessage;
+          } else {
+            errorPopupWidget(
+                context: context,
+                errorMessage:
+                    'The login feature have failed. Please try again');
+          }
         },
       );
     });

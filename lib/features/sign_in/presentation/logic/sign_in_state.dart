@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../../shared/exception/exception.dart';
-import '../../domain/entities/session_entity.dart';
+import '../../domain/entities/user_context_entity.dart';
 
 part 'sign_in_state.freezed.dart';
 
@@ -11,7 +11,7 @@ abstract class SignInState with _$SignInState {
 
   const factory SignInState.initial() = _SignInStateInitial;
   const factory SignInState.loading() = _SignInStateLoading;
-  const factory SignInState.success({required SessionEntity data}) =
+  const factory SignInState.success({required UserContextEntity data}) =
       _SignInStateSuccess;
   const factory SignInState.error(AnyException error) = _SignInStateError;
 
