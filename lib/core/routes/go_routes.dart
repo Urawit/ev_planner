@@ -5,6 +5,7 @@ import '../../features/register/presentation/register_page.dart';
 import '../../features/save/presentation/save_page.dart';
 import '../../features/setting/presentation/setting_page.dart';
 import '../../features/sign_in/presentation/sign_in_page.dart';
+import '../../shared/error_page.dart';
 
 class GoRoutes {
   const GoRoutes._();
@@ -43,6 +44,13 @@ class GoRoutes {
       name: 'SettingPage',
       builder: (context, state) {
         return const SettingPage();
+      },
+    ),
+    GoRoute(
+      path: '/error',
+      name: 'ErrorPage',
+      builder: (context, state) {
+        return const ErrorPage();
       },
     ),
   ];

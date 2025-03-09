@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
+import '../../../../shared/widgets/error_popup_widget.dart';
 import 'navigation_input_widget.dart';
 
 // TODO: clean code
@@ -47,7 +49,22 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
     if (!serviceEnabled) return;
 
     bool hasPermission = await _checkAndRequestPermission();
-    if (!hasPermission) return;
+    if (!hasPermission) {
+      if (mounted) {
+        errorPopupWidget(
+          context: context,
+          errorMessage: 'Location access is required to use this feature.',
+          additionalErrorMessage:
+              'Please enable location permissions in your device settings to proceed.',
+          buttonLabel: 'Acknowledge',
+          onRetry: () {
+            Navigator.of(context).pop();
+            context.go('/error');
+          },
+        );
+      }
+      return;
+    }
 
     Position position = await Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(
