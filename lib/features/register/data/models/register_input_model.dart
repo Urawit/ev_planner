@@ -15,6 +15,5 @@ class RegisterInputModel implements RegisterInputEntity {
   @override
   final String password;
   @override
-  @override
   final String carModelId;
 }

@@ -8,7 +8,6 @@ import 'package:geocoding/geocoding.dart';
 import '../../../../shared/widgets/error_popup_widget.dart';
 import 'navigation_input_widget.dart';
 
-// TODO: clean code
 class GoogleMapWidget extends ConsumerStatefulWidget {
   const GoogleMapWidget({super.key});
 
