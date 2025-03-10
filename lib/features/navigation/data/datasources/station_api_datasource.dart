@@ -22,7 +22,7 @@ class StationApiDataSource implements StationIDataSource {
 
         List<StationEntity> stationList = data.map((item) {
           return StationModel(
-            stationId: item['station_id'],
+            stationId: item['station_id'].toString(),
             lat: item['lat'],
             long: item['longitude'],
           );

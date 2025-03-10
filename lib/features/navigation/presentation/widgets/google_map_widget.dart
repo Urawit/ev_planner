@@ -6,6 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 import '../../../../shared/widgets/error_popup_widget.dart';
+import '../../domain/entities/entities.dart';
+import '../logic/logic.dart';
 import 'navigation_input_widget.dart';
 
 class GoogleMapWidget extends ConsumerStatefulWidget {
@@ -31,6 +33,35 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
     super.initState();
     _checkAndRequestPermission();
     _getCurrentLocation();
+    _getStationList();
+  }
+
+  void _getStationList() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(stationProvider.notifier).getStationList();
+    });
+  }
+
+  void _addStationMarkers(List<StationEntity> stations) {
+    setState(() {
+      for (var station in stations) {
+        _markers.add(
+          Marker(
+            markerId: MarkerId(station.stationId),
+            position: LatLng(station.lat, station.long),
+            infoWindow: InfoWindow(
+              title: station.stationName,
+              snippet: "Tap for details",
+              onTap: () {
+                // _navigateToStationDetail(station.id);
+              },
+            ),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          ),
+        );
+      }
+    });
   }
 
   Future<bool> _checkAndRequestPermission() async {
@@ -153,6 +184,22 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<StationState>(stationProvider, (previous, next) {
+      next.whenOrNull(data: (stations) {
+        _addStationMarkers(stations);
+      }, error: (_) {
+        errorPopupWidget(
+          context: context,
+          errorMessage:
+              'The Server have failed to get stations data. Please refresh the page',
+          buttonLabel: 'Refresh',
+          onRetry: () {
+            Navigator.of(context).pop();
+            _getStationList();
+          },
+        );
+      });
+    });
     return Scaffold(
       body: Stack(
         children: [
