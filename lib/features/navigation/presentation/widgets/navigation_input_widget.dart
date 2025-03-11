@@ -24,7 +24,7 @@ class _NavigationInputWidgetState extends State<NavigationInputWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 80, left: 5, right: 5),
+      padding: const EdgeInsets.only(top: 80, left: 10, right: 10),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(

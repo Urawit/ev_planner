@@ -8,7 +8,7 @@ import 'package:geocoding/geocoding.dart';
 import '../../../../shared/widgets/error_popup_widget.dart';
 import '../../domain/entities/entities.dart';
 import '../logic/logic.dart';
-import 'navigation_input_widget.dart';
+import 'widgets.dart';
 
 class GoogleMapWidget extends ConsumerStatefulWidget {
   const GoogleMapWidget({super.key});
@@ -17,7 +17,8 @@ class GoogleMapWidget extends ConsumerStatefulWidget {
   GoogleMapWidgetState createState() => GoogleMapWidgetState();
 }
 
-class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
+class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
+    with SingleTickerProviderStateMixin {
   GoogleMapController? _mapController;
   LatLng? _startingLocation;
   String _lastTappedField = "destination";
@@ -28,12 +29,37 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
   final TextEditingController _destinationDescriptionController =
       TextEditingController();
 
+  final ValueNotifier<bool> isStationDetailWidget = ValueNotifier(false);
+  final ValueNotifier<String?> selectedStationId = ValueNotifier(null);
+
+  late final AnimationController _animationController;
+  late final Animation<Offset> _slideAnimation;
+
   @override
   void initState() {
     super.initState();
     _checkAndRequestPermission();
     _getCurrentLocation();
     _getStationList();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   void _getStationList() {
@@ -43,25 +69,24 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
   }
 
   void _addStationMarkers(List<StationEntity> stations) {
-    setState(() {
-      for (var station in stations) {
-        _markers.add(
-          Marker(
-            markerId: MarkerId(station.stationId),
-            position: LatLng(station.lat, station.long),
-            infoWindow: InfoWindow(
-              title: station.stationName,
-              snippet: "Tap for details",
-              onTap: () {
-                // _navigateToStationDetail(station.id);
-              },
-            ),
-            icon:
-                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+    for (var station in stations) {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(station.stationId),
+          position: LatLng(station.lat, station.long),
+          infoWindow: const InfoWindow(
+            //TODO SHOULD ADD STATION NAME?
+            // title: station.stationName,
+            snippet: "Tap for details",
           ),
-        );
-      }
-    });
+          onTap: () {
+            isStationDetailWidget.value = !isStationDetailWidget.value;
+            selectedStationId.value = station.stationId;
+          },
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        ),
+      );
+    }
   }
 
   Future<bool> _checkAndRequestPermission() async {
@@ -149,7 +174,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
   }
 
   void _onMapTapped(LatLng latLng) {
-    if (_lastTappedField.isEmpty) {
+    if (_lastTappedField.isEmpty || isStationDetailWidget.value) {
       return; // Prevent setting a marker if no field is selected
     }
 
@@ -200,28 +225,97 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget> {
         );
       });
     });
+
+    final googleMapPadding = ref.watch(googleMapPaddingProvider);
+
     return Scaffold(
       body: Stack(
         children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: _startingLocation ?? const LatLng(0, 0),
-              zoom: 12.0,
+          Padding(
+            padding: EdgeInsets.only(bottom: googleMapPadding),
+            child: GoogleMap(
+              scrollGesturesEnabled: !isStationDetailWidget.value,
+              zoomGesturesEnabled: !isStationDetailWidget.value,
+              rotateGesturesEnabled: !isStationDetailWidget.value,
+              tiltGesturesEnabled: !isStationDetailWidget.value,
+              initialCameraPosition: CameraPosition(
+                target: _startingLocation ?? const LatLng(0, 0),
+                zoom: 12.0,
+              ),
+              onMapCreated: (GoogleMapController controller) {
+                _mapController = controller;
+              },
+              markers: _markers,
+              onTap: _onMapTapped,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
             ),
-            onMapCreated: (GoogleMapController controller) {
-              _mapController = controller;
-            },
-            markers: _markers,
-            onTap: _onMapTapped,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
           ),
-          NavigationInputWidget(
-            onStartingLocationTap: _onStartingLocationTap,
-            onDestinationLocationTap: _onDestinationLocationTap,
-            locationDescriptionController: _locationDescriptionController,
-            destinationDescriptionController: _destinationDescriptionController,
-            lastTappedField: _lastTappedField,
+          ValueListenableBuilder<bool>(
+            valueListenable: isStationDetailWidget,
+            builder: (context, isStationDetailWidgetVisible, child) {
+              if (isStationDetailWidgetVisible) {
+                return ValueListenableBuilder<String?>(
+                  valueListenable: selectedStationId,
+                  builder: (context, stationId, child) {
+                    Marker? selectedMarker = _markers.firstWhere(
+                      (marker) => marker.markerId.value == stationId,
+                    );
+
+                    _mapController?.animateCamera(
+                      CameraUpdate.newLatLngZoom(
+                          LatLng(
+                            selectedMarker.position.latitude + 0.00025,
+                            selectedMarker.position.longitude,
+                          ),
+                          18),
+                    );
+
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref.read(googleMapPaddingProvider.notifier).state = 515.0;
+                    });
+
+                    if (stationId != null) {
+                      _animationController.forward();
+
+                      return SlideTransition(
+                        position: _slideAnimation,
+                        child: StationDetailWidget(
+                          stationId: stationId,
+                          onPressedBackButton: () {
+                            _mapController?.animateCamera(
+                              CameraUpdate.newLatLngZoom(
+                                  _startingLocation ?? const LatLng(0, 0),
+                                  12.0),
+                            );
+                            isStationDetailWidget.value =
+                                !isStationDetailWidget.value;
+
+                            _animationController.reverse();
+
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ref
+                                  .read(googleMapPaddingProvider.notifier)
+                                  .state = 0.0;
+                            });
+                          },
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                );
+              } else {
+                return NavigationInputWidget(
+                  onStartingLocationTap: _onStartingLocationTap,
+                  onDestinationLocationTap: _onDestinationLocationTap,
+                  locationDescriptionController: _locationDescriptionController,
+                  destinationDescriptionController:
+                      _destinationDescriptionController,
+                  lastTappedField: _lastTappedField,
+                );
+              }
+            },
           ),
         ],
       ),

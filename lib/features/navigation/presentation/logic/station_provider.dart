@@ -21,3 +21,7 @@ final stationUseCaseProvider = Provider.autoDispose<StationUseCase>((ref) {
   final repository = ref.watch(stationRepositoryProvider);
   return StationUseCase(repository: repository);
 });
+
+final googleMapPaddingProvider = StateProvider.autoDispose<double>((ref) {
+  return 0.0;
+});
