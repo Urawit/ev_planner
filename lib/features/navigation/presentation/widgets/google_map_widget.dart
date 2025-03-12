@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -68,7 +71,23 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
     });
   }
 
-  void _addStationMarkers(List<StationEntity> stations) {
+  Future<BitmapDescriptor> _getCustomIcon({int width = 10}) async {
+    final ByteData data =
+        await rootBundle.load('assets/images/default_evolt_node_icon.png');
+    final Uint8List originalBytes = data.buffer.asUint8List();
+
+    final ui.Codec codec =
+        await ui.instantiateImageCodec(originalBytes, targetWidth: width);
+    final ui.FrameInfo frameInfo = await codec.getNextFrame();
+    final ByteData? resizedData =
+        await frameInfo.image.toByteData(format: ui.ImageByteFormat.png);
+
+    return BitmapDescriptor.bytes(resizedData!.buffer.asUint8List());
+  }
+
+  void _addStationMarkers(List<StationEntity> stations) async {
+    final BitmapDescriptor customIcon = await _getCustomIcon(width: 35);
+
     for (var station in stations) {
       _markers.add(
         Marker(
@@ -83,7 +102,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
             isStationDetailWidget.value = !isStationDetailWidget.value;
             selectedStationId.value = station.stationId;
           },
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          icon: customIcon,
         ),
       );
     }

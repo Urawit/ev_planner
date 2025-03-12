@@ -1,3 +1,5 @@
+import '../../data/models/review_model.dart';
+
 abstract class StationEntity {
   const StationEntity({
     required this.stationId,
@@ -17,5 +19,5 @@ abstract class StationEntity {
   final String? openTime;
   final String? closedTime;
   final String? address;
-  final String? reviewList;
+  final List<ReviewModel>? reviewList;
 }

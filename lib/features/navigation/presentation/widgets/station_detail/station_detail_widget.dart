@@ -24,8 +24,31 @@ class StationDetailWidget extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 190),
-        StationDetailHeaderWidget(onPressedBackButton: onPressedBackButton),
+        const SizedBox(height: 180),
+        const Divider(
+          color: Colors.black,
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 600,
+                    color: Colors.white,
+                    child: Column(
+                      children: [
+                        StationDetailHeaderWidget(
+                            stationId: stationId,
+                            onPressedBackButton: onPressedBackButton),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

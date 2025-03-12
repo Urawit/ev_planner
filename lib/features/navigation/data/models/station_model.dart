@@ -1,4 +1,5 @@
 import '../../domain/entities/station_entity.dart';
+import 'review_model.dart';
 
 class StationModel implements StationEntity {
   const StationModel({
@@ -33,5 +34,5 @@ class StationModel implements StationEntity {
   final String? address;
 
   @override
-  final String? reviewList;
+  final List<ReviewModel>? reviewList;
 }
