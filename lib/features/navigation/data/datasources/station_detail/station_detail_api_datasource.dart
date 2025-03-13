@@ -20,6 +20,7 @@ class StationDetailApiDataSource implements StationDetailIDataSource {
         final data = json.decode(response.body);
 
         return StationModel(
+          //TODO add rate, port availability
           stationId: data['station_id'].toString(),
           stationName: data['station_name'],
           openTime: data['opentime'],

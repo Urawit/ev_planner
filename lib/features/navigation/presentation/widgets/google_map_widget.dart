@@ -9,6 +9,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 import '../../../../shared/widgets/error_popup_widget.dart';
+//TODO DELETE THIS
+import '../../../sign_in/data/models/sign_in_input_model.dart';
+import '../../../sign_in/presentation/logic/sign_in_provider.dart';
+
 import '../../domain/entities/entities.dart';
 import '../logic/logic.dart';
 import 'widgets.dart';
@@ -68,6 +72,12 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
   void _getStationList() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(stationProvider.notifier).getStationList();
+
+      //TODO DELETE THIS
+      ref.read(signInProvider.notifier).signIn(
+            signInInput:
+                SignInInputModel(email: 'admin@gmail.com', password: '1234'),
+          );
     });
   }
 

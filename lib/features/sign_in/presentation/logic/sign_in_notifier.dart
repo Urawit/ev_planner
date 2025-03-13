@@ -17,8 +17,6 @@ class SignInNotifier extends EVNotifier<SignInState> {
     }, (result) async {
       state = SignInState.success(data: result);
 
-      // TODO: store userContext
-      // final userContext = ref.watch(userContextProvider);
       ref.read(userContextProvider.notifier).state = result;
     });
   }
