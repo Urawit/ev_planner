@@ -5,6 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../../../../../shared/theme/ev_design_system.dart';
 import '../../../../bookmark/presentation/logic/get_bookmark_list_provider.dart';
 import '../../../../sign_in/presentation/logic/logic.dart';
+import '../../../data/models/bookmark_input_model.dart';
 import '../../logic/logic.dart';
 import 'station_detail_loading_view.dart';
 
@@ -28,32 +29,49 @@ class StationDetailHeaderWidgetState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final userContext = ref.read(userContextProvider);
-
-      ref
-          .read(stationDetailProvider.notifier)
-          .getStationDetail(stationId: widget.stationId);
-
-      if (userContext == null) return;
-
-      ref
-          .read(getBookmarkListProvider.notifier)
-          .getBookmarkList(userId: userContext.userId);
+      getStationDetailData();
+      getBookmarkList();
     });
     super.initState();
+  }
+
+  void getStationDetailData() {
+    ref
+        .read(stationDetailProvider.notifier)
+        .getStationDetail(stationId: widget.stationId);
+  }
+
+  void getBookmarkList() {
+    final userContext = ref.read(userContextProvider);
+
+    if (userContext == null) return;
+
+    ref
+        .read(getBookmarkListProvider.notifier)
+        .getBookmarkList(userId: userContext.userId);
   }
 
   @override
   Widget build(BuildContext context) {
     final stationDetailState = ref.watch(stationDetailProvider);
     final bookmarkState = ref.watch(getBookmarkListProvider);
+    final userContext = ref.watch(userContextProvider);
 
     return stationDetailState.whenOrNull(
           data: (stationDetail) {
-            final isSaved = bookmarkState.whenOrNull(
-              data: (bookmarks) => bookmarks
-                  .any((bookmark) => bookmark.stationId == widget.stationId),
-            );
+            final bookmarks = bookmarkState.whenOrNull(
+                  data: (bookmarks) => bookmarks,
+                ) ??
+                [];
+
+            final bookmark = bookmarks
+                    .where((bookmark) => bookmark.stationId == widget.stationId)
+                    .isNotEmpty
+                ? bookmarks.firstWhere(
+                    (bookmark) => bookmark.stationId == widget.stationId)
+                : null;
+
+            final isSaved = bookmark != null;
 
             return Column(
               children: [
@@ -91,16 +109,25 @@ class StationDetailHeaderWidgetState
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: IconButton(
                           icon: Icon(
-                            isSaved ?? false
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color:
-                                isSaved ?? false ? Colors.orange : Colors.grey,
+                            isSaved ? Icons.favorite : Icons.favorite_border,
+                            color: isSaved ? Colors.orange : Colors.grey,
                           ),
-                          onPressed: () {
-                            // ref
-                            //     .read(savedStationsProvider.notifier)
-                            //     .toggleSaved(widget.stationId);
+                          onPressed: () async {
+                            if (isSaved) {
+                              await ref
+                                  .read(deleteBookmarkProvider.notifier)
+                                  .deleteBookmark(
+                                      bookmarkId: bookmark.bookmarkId);
+                            } else {
+                              if (userContext == null) return;
+                              await ref
+                                  .read(saveBookmarkProvider.notifier)
+                                  .saveBookmark(
+                                      bookmarkInput: BookmarkInputModel(
+                                          userId: userContext.userId,
+                                          stationId: widget.stationId));
+                            }
+                            getBookmarkList();
                           },
                         ),
                       ),

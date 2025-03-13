@@ -9,7 +9,7 @@ class DeleteBookmarkApiDataSource implements DeleteBookmarkIDataSource {
   @override
   Future<bool> deleteBookmark({required String bookmarkId}) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl$bookmarkId'));
+      final response = await http.delete(Uri.parse('$baseUrl$bookmarkId'));
 
       if (response.statusCode == 200) {
         return true;
