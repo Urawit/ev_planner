@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../../../../shared/theme/ev_design_system.dart';
+import '../../../../bookmark/presentation/logic/get_bookmark_list_provider.dart';
 import '../../../../sign_in/presentation/logic/logic.dart';
 import '../../logic/logic.dart';
 import 'station_detail_loading_view.dart';
@@ -27,9 +28,17 @@ class StationDetailHeaderWidgetState
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userContext = ref.read(userContextProvider);
+
       ref
           .read(stationDetailProvider.notifier)
           .getStationDetail(stationId: widget.stationId);
+
+      if (userContext == null) return;
+
+      ref
+          .read(getBookmarkListProvider.notifier)
+          .getBookmarkList(userId: userContext.userId);
     });
     super.initState();
   }
@@ -37,12 +46,14 @@ class StationDetailHeaderWidgetState
   @override
   Widget build(BuildContext context) {
     final stationDetailState = ref.watch(stationDetailProvider);
-    final userContext = ref.watch(userContextProvider);
+    final bookmarkState = ref.watch(getBookmarkListProvider);
 
     return stationDetailState.whenOrNull(
           data: (stationDetail) {
-            final isBookmarked = userContext?.bookmarkList
-                .any((bookmark) => bookmark.stationId == widget.stationId);
+            final isSaved = bookmarkState.whenOrNull(
+              data: (bookmarks) => bookmarks
+                  .any((bookmark) => bookmark.stationId == widget.stationId),
+            );
 
             return Column(
               children: [
@@ -80,12 +91,11 @@ class StationDetailHeaderWidgetState
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: IconButton(
                           icon: Icon(
-                            isBookmarked ?? false
+                            isSaved ?? false
                                 ? Icons.favorite
                                 : Icons.favorite_border,
-                            color: isBookmarked ?? false
-                                ? Colors.orange
-                                : Colors.grey,
+                            color:
+                                isSaved ?? false ? Colors.orange : Colors.grey,
                           ),
                           onPressed: () {
                             // ref
@@ -133,7 +143,7 @@ class StationDetailHeaderWidgetState
                             ],
                           ),
                           Text('distance'),
-                          Text('port availability'),
+                          Text(stationDetail.availablePort.toString()),
                         ],
                       ),
                       Column(
@@ -147,7 +157,7 @@ class StationDetailHeaderWidgetState
                     ],
                   ),
                 ),
-                Text('PORT LIST'),
+                Text('Plug LIST'),
               ],
             );
           },

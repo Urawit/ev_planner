@@ -4,22 +4,25 @@ import 'review_model.dart';
 class StationModel implements StationEntity {
   const StationModel({
     required this.stationId,
-    required this.lat,
-    required this.long,
+    this.lat,
+    this.long,
     this.stationName,
     this.openTime,
     this.closedTime,
     this.address,
+    this.avergeRating,
+    this.rateCount,
+    this.availablePort,
     this.reviewList,
   });
   @override
   final String stationId;
 
   @override
-  final double lat;
+  final double? lat;
 
   @override
-  final double long;
+  final double? long;
 
   @override
   final String? stationName;
@@ -32,6 +35,15 @@ class StationModel implements StationEntity {
 
   @override
   final String? address;
+
+  @override
+  final double? avergeRating;
+
+  @override
+  final int? rateCount;
+
+  @override
+  final int? availablePort;
 
   @override
   final List<ReviewModel>? reviewList;

@@ -39,7 +39,7 @@ class SignInApiDataSource implements SignInIDataSource {
         }).toList();
 
         return UserContextModel(
-            userId: userData['user_id'].toString(),
+            userId: userData['userId'].toString(),
             displayName: userData['username'],
             email: userData['email'],
             carModelId: userData['model_id'].toString(),

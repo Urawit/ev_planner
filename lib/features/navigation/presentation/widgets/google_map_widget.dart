@@ -9,9 +9,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 import '../../../../shared/widgets/error_popup_widget.dart';
-//TODO DELETE THIS
-import '../../../sign_in/data/models/sign_in_input_model.dart';
-import '../../../sign_in/presentation/logic/sign_in_provider.dart';
+//TODO delete this
+import '../../../sign_in/data/data.dart';
+import '../../../sign_in/presentation/logic/logic.dart';
 
 import '../../domain/entities/entities.dart';
 import '../logic/logic.dart';
@@ -102,12 +102,8 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
       _markers.add(
         Marker(
           markerId: MarkerId(station.stationId),
-          position: LatLng(station.lat, station.long),
-          infoWindow: const InfoWindow(
-            //TODO SHOULD ADD STATION NAME?
-            // title: station.stationName,
-            snippet: "Tap for details",
-          ),
+          position: LatLng(station.lat ?? 0, station.long ?? 0),
+          infoWindow: InfoWindow(title: station.stationName),
           onTap: () {
             isStationDetailWidget.value = !isStationDetailWidget.value;
             selectedStationId.value = station.stationId;

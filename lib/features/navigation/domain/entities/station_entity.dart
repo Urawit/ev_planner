@@ -3,21 +3,27 @@ import '../../data/models/review_model.dart';
 abstract class StationEntity {
   const StationEntity({
     required this.stationId,
-    required this.lat,
-    required this.long,
+    this.lat,
+    this.long,
     this.stationName,
     this.openTime,
     this.closedTime,
     this.address,
+    this.avergeRating,
+    this.rateCount,
+    this.availablePort,
     this.reviewList,
   });
 
   final String stationId;
-  final double lat;
-  final double long;
+  final double? lat;
+  final double? long;
   final String? stationName;
   final String? openTime;
   final String? closedTime;
   final String? address;
+  final double? avergeRating;
+  final int? rateCount;
+  final int? availablePort;
   final List<ReviewModel>? reviewList;
 }

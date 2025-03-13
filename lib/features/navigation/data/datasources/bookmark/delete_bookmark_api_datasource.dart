@@ -4,7 +4,7 @@ import '../../../../../shared/exception/exception.dart';
 import 'delete_bookmark_idatasource.dart';
 
 class DeleteBookmarkApiDataSource implements DeleteBookmarkIDataSource {
-  final String baseUrl = "http://10.0.2.2:8080/api/bookmark";
+  final String baseUrl = "http://10.0.2.2:8080/api/bookmark/";
 
   @override
   Future<bool> deleteBookmark({required String bookmarkId}) async {

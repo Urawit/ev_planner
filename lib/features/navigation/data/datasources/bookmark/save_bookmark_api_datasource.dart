@@ -5,7 +5,7 @@ import '../../../domain/domain.dart';
 import 'save_bookmark_idatasource.dart';
 
 class SaveBookmarkApiDataSource implements SaveBookmarkIDataSource {
-  final String baseUrl = "http://10.0.2.2:8080/api/bookmark/save";
+  final String baseUrl = "http://10.0.2.2:8080/api/bookmark/save/";
 
   @override
   Future<bool> saveBookmark(

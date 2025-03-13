@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../save/presentation/save_page.dart';
+import '../../bookmark/presentation/bookmark_page.dart';
 import '../../setting/presentation/setting_page.dart';
 import 'widgets/widgets.dart';
 
@@ -15,7 +15,7 @@ class NavigationPageState extends State<NavigationPage> {
   int currentPageIndex = 0;
   final List<Widget> _pages = [
     const NavigationWidget(),
-    const SavePage(),
+    const BookmarkPage(),
     const SettingPage(),
   ];
 

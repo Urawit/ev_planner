@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/navigation/presentation/navigation_page.dart';
 import '../../features/register/presentation/register_page.dart';
-import '../../features/save/presentation/save_page.dart';
+import '../../features/bookmark/presentation/bookmark_page.dart';
 import '../../features/setting/presentation/setting_page.dart';
 import '../../features/sign_in/presentation/sign_in_page.dart';
 import '../../shared/error_page.dart';
@@ -33,10 +33,10 @@ class GoRoutes {
       },
     ),
     GoRoute(
-      path: '/save',
-      name: 'SavePage',
+      path: '/bookmark',
+      name: 'BookmarkPage',
       builder: (context, state) {
-        return const SavePage();
+        return const BookmarkPage();
       },
     ),
     GoRoute(
