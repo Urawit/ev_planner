@@ -5,7 +5,7 @@ abstract class BookmarkEntity {
     required this.stationName,
     required this.availablePort,
     required this.stationId,
-    required this.ratecount,
+    required this.rateCount,
     required this.averageRating,
   });
   final String bookmarkId;
@@ -13,6 +13,6 @@ abstract class BookmarkEntity {
   final String stationName;
   final int availablePort;
   final String stationId;
-  final int ratecount;
+  final int rateCount;
   final double averageRating;
 }

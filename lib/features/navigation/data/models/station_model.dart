@@ -10,7 +10,7 @@ class StationModel implements StationEntity {
     this.openTime,
     this.closedTime,
     this.address,
-    this.avergeRating,
+    this.averageRating,
     this.rateCount,
     this.availablePort,
     this.reviewList,
@@ -37,7 +37,7 @@ class StationModel implements StationEntity {
   final String? address;
 
   @override
-  final double? avergeRating;
+  final double? averageRating;
 
   @override
   final int? rateCount;

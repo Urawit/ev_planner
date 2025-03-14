@@ -20,14 +20,14 @@ class StationDetailApiDataSource implements StationDetailIDataSource {
         final data = json.decode(response.body);
 
         return StationModel(
-          stationId: data['station_id'].toString(),
+          stationId: data['stationId'].toString(),
           stationName: data['station_name'],
           openTime: data['opentime'],
           closedTime: data['closetime'],
           lat: data['lat'],
           long: data['longitude'],
           address: data['address'],
-          avergeRating: data['average_rating'],
+          averageRating: data['average_rating'],
           rateCount: data['rating_count'],
           availablePort: data['port_available'],
           reviewList: (data['reviewsList'] as List).map((reviewItem) {

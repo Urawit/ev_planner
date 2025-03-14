@@ -9,7 +9,7 @@ abstract class StationEntity {
     this.openTime,
     this.closedTime,
     this.address,
-    this.avergeRating,
+    this.averageRating,
     this.rateCount,
     this.availablePort,
     this.reviewList,
@@ -22,7 +22,7 @@ abstract class StationEntity {
   final String? openTime;
   final String? closedTime;
   final String? address;
-  final double? avergeRating;
+  final double? averageRating;
   final int? rateCount;
   final int? availablePort;
   final List<ReviewModel>? reviewList;

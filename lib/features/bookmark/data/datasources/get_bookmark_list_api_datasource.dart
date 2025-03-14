@@ -26,7 +26,7 @@ class GetBookmarkListApiDataSource implements GetBookmarkListIDataSource {
                   stationName: json['station_name'],
                   availablePort: json['port_available'],
                   stationId: json['station_id'].toString(),
-                  ratecount: json['rating_count'],
+                  rateCount: json['rating_count'],
                   averageRating: (json['average_rating'] as num).toDouble(),
                 ))
             .toList();

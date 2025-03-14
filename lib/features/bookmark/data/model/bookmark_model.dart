@@ -7,7 +7,7 @@ class BookmarkModel implements BookmarkEntity {
     required this.stationName,
     required this.availablePort,
     required this.stationId,
-    required this.ratecount,
+    required this.rateCount,
     required this.averageRating,
   });
   @override
@@ -21,7 +21,7 @@ class BookmarkModel implements BookmarkEntity {
   @override
   final String stationId;
   @override
-  final int ratecount;
+  final int rateCount;
   @override
   final double averageRating;
 }
