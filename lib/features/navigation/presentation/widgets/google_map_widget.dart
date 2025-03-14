@@ -125,14 +125,16 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
         accuracy: LocationAccuracy.high,
       ),
     );
-
-    setState(() {
-      _startingLocation = LatLng(position.latitude, position.longitude);
-      _getAddressFromLatLng(_startingLocation!, _locationDescriptionController);
-      _updateMarker("startingLocation", _startingLocation!,
-          BitmapDescriptor.hueGreen, "Starting Location");
-      _moveCameraToLocation(_startingLocation!);
-    });
+    if (mounted) {
+      setState(() {
+        _startingLocation = LatLng(position.latitude, position.longitude);
+        _getAddressFromLatLng(
+            _startingLocation!, _locationDescriptionController);
+        _updateMarker("startingLocation", _startingLocation!,
+            BitmapDescriptor.hueGreen, "Starting Location");
+        _moveCameraToLocation(_startingLocation!);
+      });
+    }
   }
 
   Future<void> _getAddressFromLatLng(

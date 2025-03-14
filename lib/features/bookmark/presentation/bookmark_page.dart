@@ -74,7 +74,7 @@ class BookmarkPageState extends ConsumerState<BookmarkPage> {
                 ),
                 child: ListTile(
                   onTap: () {
-                    context.go('/navigation?stationId=${bookmark.stationId}');
+                    context.push('/station-detail/${bookmark.stationId}');
                   },
                   contentPadding: const EdgeInsets.all(12.0),
                   title: Row(

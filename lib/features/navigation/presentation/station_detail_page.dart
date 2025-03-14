@@ -79,11 +79,15 @@ class StationDetailPageState extends ConsumerState<StationDetailPage> {
                 ),
               ],
             ),
+            const Divider(
+              color: Colors.grey,
+              height: 1,
+            ),
             SizedBox(
               height: 180,
               child: GoogleMap(
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(stationDetail.lat ?? 0 + 0.00025,
+                  target: LatLng((stationDetail.lat ?? 0) + 0.00015,
                       stationDetail.long ?? 0),
                   zoom: 18.0,
                 ),
@@ -101,7 +105,7 @@ class StationDetailPageState extends ConsumerState<StationDetailPage> {
               ),
             ),
             const Divider(
-              color: Colors.black,
+              color: Colors.grey,
               height: 1,
             ),
             StationDetailBodyWidget(

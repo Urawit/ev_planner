@@ -1,3 +1,4 @@
+import 'package:ev_planner/shared/theme/ev_design_system.dart';
 import 'package:flutter/material.dart';
 
 import '../../bookmark/presentation/bookmark_page.dart';
@@ -24,6 +25,8 @@ class NavigationPageState extends State<NavigationPage> {
     return Scaffold(
       body: _pages[currentPageIndex],
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.white,
+        indicatorColor: EVDesignSystem.colors.orange.withAlpha(200),
         onDestinationSelected: (int index) {
           if (index != currentPageIndex) {
             setState(() {
@@ -33,20 +36,19 @@ class NavigationPageState extends State<NavigationPage> {
         },
         // indicatorColor: Colors.amber,
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
+            icon: Image.asset("assets/images/navigation_tab_icon.png",
+                scale: 4.5),
             label: 'Navigation',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.save),
-            icon: Icon(Icons.save_outlined),
+            icon:
+                Image.asset("assets/images/bookmark_tab_icon.png", scale: 4.0),
             label: 'Save',
           ),
           NavigationDestination(
-            selectedIcon: Icon(Icons.settings),
-            icon: Icon(Icons.settings_outlined),
+            icon: Image.asset("assets/images/setting_tab_icon.png", scale: 4.0),
             label: 'Settings',
           ),
         ],
