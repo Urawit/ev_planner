@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../shared/theme/ev_design_system.dart';
 import '../../../../bookmark/presentation/logic/get_bookmark_list_provider.dart';
@@ -51,6 +52,22 @@ class StationDetailHeaderWidgetState
         .getBookmarkList(userId: userContext.userId);
   }
 
+  Future<void> openEvoltApp() async {
+    const evoltAppPackage = "th.evolt.echarge";
+    const evoltPlayStoreUrl =
+        "https://play.google.com/store/apps/details?id=$evoltAppPackage";
+
+    final Uri evoltAppUri =
+        Uri.parse("intent://#Intent;package=$evoltAppPackage;end;");
+
+    if (await canLaunchUrl(evoltAppUri)) {
+      await launchUrl(evoltAppUri);
+    } else {
+      await launchUrl(Uri.parse(evoltPlayStoreUrl),
+          mode: LaunchMode.externalApplication);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final stationDetailState = ref.watch(stationDetailProvider);
@@ -76,7 +93,7 @@ class StationDetailHeaderWidgetState
             return Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: Row(
                     children: [
                       IconButton(
@@ -104,14 +121,17 @@ class StationDetailHeaderWidgetState
                           ],
                         ),
                       ),
-                      const SizedBox(width: 35),
+                      const SizedBox(width: 20),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: IconButton(
-                          icon: Icon(
-                            isSaved ? Icons.favorite : Icons.favorite_border,
-                            color: isSaved ? Colors.orange : Colors.grey,
-                          ),
+                          icon: isSaved
+                              ? Image.asset(
+                                  "assets/images/heart_filledout.png",
+                                  scale: 6.0,
+                                )
+                              : Image.asset("assets/images/heart_outline.png",
+                                  scale: 6.0),
                           onPressed: () async {
                             if (isSaved) {
                               await ref
@@ -136,7 +156,7 @@ class StationDetailHeaderWidgetState
                 ),
                 Padding(
                   padding:
-                      const EdgeInsets.only(top: 22.0, left: 27, right: 27),
+                      const EdgeInsets.only(top: 15.0, left: 35, right: 40),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -146,8 +166,9 @@ class StationDetailHeaderWidgetState
                           Row(
                             children: [
                               RatingBar.builder(
-                                initialRating: 3,
-                                minRating: 1,
+                                ignoreGestures: true,
+                                initialRating:
+                                    stationDetail.avergeRating ?? 0.0,
                                 direction: Axis.horizontal,
                                 allowHalfRating: true,
                                 itemCount: 5,
@@ -158,31 +179,102 @@ class StationDetailHeaderWidgetState
                                   Icons.star,
                                   color: Colors.amber,
                                 ),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
-                                },
+                                onRatingUpdate: (_) {},
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                '(37)',
+                                '(${stationDetail.rateCount.toString()})',
                                 style: EVDesignSystem.textStyles.normal3,
                               ),
                             ],
                           ),
-                          Text('distance'),
-                          Text(stationDetail.availablePort.toString()),
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: Image.asset(
+                                  "assets/images/distance_icon.png",
+                                  scale: 6.0,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              //TODO add distance from google api
+                              Text('5.57 km',
+                                  style:
+                                      EVDesignSystem.textStyles.description1),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Image.asset(
+                                "assets/images/plug_availability.png",
+                                scale: 4.5,
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                '${stationDetail.availablePort.toString()} port available',
+                                style: EVDesignSystem.textStyles.description2,
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ElevatedButton(
-                              onPressed: () {}, child: const Text('Review')),
-                          ElevatedButton(
-                              onPressed: () {}, child: const Text('Evolt')),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/images/review_entry_icon.png",
+                                  scale: 5.0,
+                                ),
+                                const SizedBox(
+                                  width: 6,
+                                ),
+                                Text('Review',
+                                    style:
+                                        EVDesignSystem.textStyles.description1),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 3.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                openEvoltApp();
+                              },
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/default_evolt_node_icon.png",
+                                    scale: 6.0,
+                                  ),
+                                  const SizedBox(
+                                    width: 13,
+                                  ),
+                                  Text('Evolt',
+                                      style: EVDesignSystem
+                                          .textStyles.description1),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Text('Plug LIST'),
               ],
