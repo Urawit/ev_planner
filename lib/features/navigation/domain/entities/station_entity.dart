@@ -1,4 +1,4 @@
-import '../../data/models/review_model.dart';
+import '../../data/models/models.dart';
 
 abstract class StationEntity {
   const StationEntity({
@@ -13,6 +13,7 @@ abstract class StationEntity {
     this.rateCount,
     this.availablePort,
     this.reviewList,
+    this.plugList,
   });
 
   final String stationId;
@@ -26,4 +27,5 @@ abstract class StationEntity {
   final int? rateCount;
   final int? availablePort;
   final List<ReviewModel>? reviewList;
+  final List<PlugModel>? plugList;
 }

@@ -108,11 +108,15 @@ class StationDetailPageState extends ConsumerState<StationDetailPage> {
               color: Colors.grey,
               height: 1,
             ),
-            StationDetailBodyWidget(
-              stationDetail: stationDetail,
-              onPressedBackButton: () {
-                context.pop();
-              },
+            Expanded(
+              child: SingleChildScrollView(
+                child: StationDetailBodyWidget(
+                  stationDetail: stationDetail,
+                  onPressedBackButton: () {
+                    context.pop();
+                  },
+                ),
+              ),
             ),
           ],
         ),

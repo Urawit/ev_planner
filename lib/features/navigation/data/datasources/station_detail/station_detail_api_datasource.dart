@@ -4,8 +4,7 @@ import 'dart:convert';
 import '../../../../../shared/error/error_message_model.dart';
 import '../../../../../shared/exception/exception.dart';
 import '../../../domain/entities/station_entity.dart';
-import '../../models/review_model.dart';
-import '../../models/station_model.dart';
+import '../../models/models.dart';
 import 'station_detail_idatasource.dart';
 
 class StationDetailApiDataSource implements StationDetailIDataSource {
@@ -37,6 +36,15 @@ class StationDetailApiDataSource implements StationDetailIDataSource {
               createDate: reviewItem['create_date'],
               userId: reviewItem['user_id'].toString(),
               stationId: reviewItem['station_id'].toString(),
+            );
+          }).toList(),
+          plugList: (data['plugList'] as List).map((plugItem) {
+            return PlugModel(
+              plugId: plugItem['plug_id'].toString(),
+              status: plugItem['status'],
+              plugType: plugItem['plug_type'],
+              price: plugItem['pricing'],
+              maxKwh: plugItem['maxKwh'].toString(),
             );
           }).toList(),
         );

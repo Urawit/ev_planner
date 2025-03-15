@@ -1,5 +1,5 @@
 import '../../domain/entities/station_entity.dart';
-import 'review_model.dart';
+import 'models.dart';
 
 class StationModel implements StationEntity {
   const StationModel({
@@ -14,6 +14,7 @@ class StationModel implements StationEntity {
     this.rateCount,
     this.availablePort,
     this.reviewList,
+    this.plugList,
   });
   @override
   final String stationId;
@@ -47,4 +48,7 @@ class StationModel implements StationEntity {
 
   @override
   final List<ReviewModel>? reviewList;
+
+  @override
+  final List<PlugModel>? plugList;
 }
