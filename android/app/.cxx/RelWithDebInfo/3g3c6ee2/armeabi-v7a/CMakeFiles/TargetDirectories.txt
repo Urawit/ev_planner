@@ -1,0 +1,2 @@
+C:/Users/urawi/Desktop/ev_planner/android/app/.cxx/RelWithDebInfo/3g3c6ee2/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/urawi/Desktop/ev_planner/android/app/.cxx/RelWithDebInfo/3g3c6ee2/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../shared/theme/ev_design_system.dart';
@@ -215,7 +216,9 @@ class StationDetailBodyWidgetState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      context.push('/review', extra: widget.stationDetail);
+                    },
                     child: Row(
                       children: [
                         Image.asset(
