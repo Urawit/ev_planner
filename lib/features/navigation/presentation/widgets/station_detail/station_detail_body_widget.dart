@@ -59,6 +59,19 @@ class StationDetailBodyWidgetState
     }
   }
 
+  Future<void> openGoogleMaps() async {
+    final double latitude = widget.stationDetail.lat ?? 0;
+    final double longitude = widget.stationDetail.long ?? 0;
+    final Uri googleMapsUri = Uri.parse(
+        "https://www.google.com/maps/search/?api=1&query=$latitude,$longitude");
+
+    if (await canLaunchUrl(googleMapsUri)) {
+      await launchUrl(googleMapsUri, mode: LaunchMode.externalApplication);
+    } else {
+      throw "Could not launch Google Maps";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final bookmarkState = ref.watch(getBookmarkListProvider);
@@ -179,8 +192,12 @@ class StationDetailBodyWidgetState
                       ),
                       Row(
                         children: [
-                          Image.asset("assets/images/distance_icon.png",
-                              scale: 6.0),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 15.0),
+                            child: Image.asset(
+                                "assets/images/distance_icon.png",
+                                scale: 6.0),
+                          ),
                           const SizedBox(width: 15),
                           Text('5.57 km',
                               style: EVDesignSystem.textStyles.description1),
@@ -219,7 +236,7 @@ class StationDetailBodyWidgetState
                         ),
                       ),
                       const SizedBox(
-                        height: 15,
+                        height: 5,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 3.0),
@@ -237,6 +254,31 @@ class StationDetailBodyWidgetState
                                 width: 13,
                               ),
                               Text('Evolt',
+                                  style:
+                                      EVDesignSystem.textStyles.description1),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            openGoogleMaps();
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                "assets/images/google_map_icon.png",
+                                scale: 4.5,
+                              ),
+                              const SizedBox(
+                                width: 18,
+                              ),
+                              Text('Map',
                                   style:
                                       EVDesignSystem.textStyles.description1),
                             ],
