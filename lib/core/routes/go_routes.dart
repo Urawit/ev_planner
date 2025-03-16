@@ -1,3 +1,4 @@
+import 'package:ev_planner/features/review/presentation/edit_review_page.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/navigation/domain/entities/station_entity.dart';
@@ -61,6 +62,18 @@ class GoRoutes {
       builder: (context, state) {
         final stationDetail = state.extra as StationEntity;
         return ReviewPage(stationDetail: stationDetail);
+      },
+    ),
+    GoRoute(
+      path: '/edit-review/:reviewId',
+      builder: (context, state) {
+        final reviewId = state.pathParameters['reviewId'] ?? '';
+        final previousComment =
+            state.uri.queryParameters['previousComment'] ?? '';
+        return EditReviewPage(
+          reviewId: reviewId,
+          previousComment: previousComment,
+        );
       },
     ),
     GoRoute(

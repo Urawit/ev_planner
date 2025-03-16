@@ -1,5 +1,8 @@
+import 'package:ev_planner/features/sign_in/presentation/logic/sign_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../shared/theme/ev_design_system.dart';
 import '../../../navigation/domain/entities/station_entity.dart';
@@ -17,6 +20,9 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
   @override
   Widget build(BuildContext context) {
     final reviewList = widget.stationDetail.reviewList;
+
+    final userContext = ref.watch(userContextProvider);
+
     return Column(
       children: [
         Padding(
@@ -45,19 +51,21 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
             itemBuilder: (context, index) {
               final review = reviewList[index];
 
+              DateTime createdAt = DateTime.parse(review.createDate);
+              String timeAgo = timeago.format(createdAt, locale: 'en_short');
+
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Profile Picture + Username + Menu Button
                     Row(
                       children: [
                         const CircleAvatar(
                           radius: 20,
                           backgroundImage:
-                              AssetImage("assets/images/avatar.png")
+                              AssetImage("assets/images/Avatar.png")
                                   as ImageProvider,
                           //TODO ADD PROFILE IMAGE
                           // backgroundImage: review.profileImageUrl != null
@@ -65,28 +73,46 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                           //     : const AssetImage("assets/images/default_profile.png") as ImageProvider,
                         ),
                         const SizedBox(width: 10),
-
-                        // Username
                         Expanded(
                           child: Text(
                             'review.username',
                             style: EVDesignSystem.textStyles.headline4,
                           ),
                         ),
-
-                        // Three-dot Menu Button (Optional Actions)
-                        IconButton(
-                          icon: const Icon(Icons.more_vert),
-                          onPressed: () {
-                            // Handle menu action
-                          },
-                        ),
+                        if (userContext?.userId == review.userId)
+                          IconButton(
+                            icon: const Icon(Icons.more_vert),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                context: context,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(12)),
+                                ),
+                                builder: (context) {
+                                  return Wrap(
+                                    children: [
+                                      ListTile(
+                                          leading: const Icon(Icons.edit,
+                                              color: Colors.blue),
+                                          title: const Text("Edit"),
+                                          onTap: () => context.push(
+                                              '/edit-review/${review.reviewId}?previousComment=${review.comment}')),
+                                      ListTile(
+                                        leading: const Icon(Icons.delete,
+                                            color: Colors.red),
+                                        title: const Text("Delete"),
+                                        onTap: () {},
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
                       ],
                     ),
-
                     const SizedBox(height: 4),
-
-                    // Comment Box
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
@@ -99,14 +125,11 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                         style: EVDesignSystem.textStyles.normal2,
                       ),
                     ),
-
-                    // Date Outside the Box (Lower Left)
                     Padding(
                       padding: const EdgeInsets.only(left: 4, top: 6),
                       child: Text(
-                        review
-                            .createDate, // Assuming this is a formatted date string
-                        style: EVDesignSystem.textStyles.normal2
+                        timeAgo,
+                        style: EVDesignSystem.textStyles.normal3
                             .copyWith(color: Colors.grey),
                       ),
                     ),
