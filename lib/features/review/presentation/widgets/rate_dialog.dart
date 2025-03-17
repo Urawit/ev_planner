@@ -74,7 +74,7 @@ Future<void> showRateDialog(
             IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                // if initialRating
+                // TODO if initialRating
                 Navigator.of(context).pop();
               },
             ),
