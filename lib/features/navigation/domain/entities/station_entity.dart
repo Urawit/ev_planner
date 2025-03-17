@@ -13,6 +13,7 @@ abstract class StationEntity {
     this.rateCount,
     this.availablePort,
     this.reviewList,
+    this.ratingList,
     this.plugList,
   });
 
@@ -27,5 +28,6 @@ abstract class StationEntity {
   final int? rateCount;
   final int? availablePort;
   final List<ReviewModel>? reviewList;
+  final List<RatingModel>? ratingList;
   final List<PlugModel>? plugList;
 }

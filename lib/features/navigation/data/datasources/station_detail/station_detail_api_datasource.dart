@@ -38,6 +38,13 @@ class StationDetailApiDataSource implements StationDetailIDataSource {
                 stationId: reviewItem['station_id'].toString(),
                 username: reviewItem['username']);
           }).toList(),
+          ratingList: (data['stationRatings'] as List).map((ratingItem) {
+            return RatingModel(
+              ratingId: ratingItem['rating_id'].toString(),
+              rating: ratingItem['rating'].toString(),
+              userId: ratingItem['user_id'].toString(),
+            );
+          }).toList(),
           plugList: (data['plugList'] as List).map((plugItem) {
             return PlugModel(
               plugId: plugItem['plug_id'].toString(),

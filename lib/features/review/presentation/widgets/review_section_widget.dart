@@ -234,7 +234,7 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
               )
             else
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
                 child: Text("No reviews yet.",
                     style: TextStyle(color: Colors.grey)),
               ),

@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
 import '../../navigation/domain/entities/station_entity.dart';
+import '../../sign_in/presentation/logic/sign_in_provider.dart';
+import 'widgets/rate_dialog.dart';
 import 'widgets/review_section_widget.dart';
 
 class ReviewPage extends ConsumerStatefulWidget {
@@ -19,6 +21,8 @@ class ReviewPage extends ConsumerStatefulWidget {
 class ReviewPageState extends ConsumerState<ReviewPage> {
   @override
   Widget build(BuildContext context) {
+    final userContext = ref.watch(userContextProvider);
+
     return Scaffold(
       body: Column(
         children: [
@@ -94,9 +98,8 @@ class ReviewPageState extends ConsumerState<ReviewPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      onPressed: () {
-                        //TODO implement rating
-                      },
+                      onPressed: () => showRateDialog(context,
+                          widget.stationDetail, userContext?.userId ?? ''),
                       child: const Text('Rate')),
                 ),
               ],

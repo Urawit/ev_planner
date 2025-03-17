@@ -14,6 +14,7 @@ class StationModel implements StationEntity {
     this.rateCount,
     this.availablePort,
     this.reviewList,
+    this.ratingList,
     this.plugList,
   });
   @override
@@ -48,6 +49,9 @@ class StationModel implements StationEntity {
 
   @override
   final List<ReviewModel>? reviewList;
+
+  @override
+  final List<RatingModel>? ratingList;
 
   @override
   final List<PlugModel>? plugList;
