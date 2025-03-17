@@ -6,7 +6,7 @@ class EditRateNotifier extends EVNotifier<EditRateState> {
     return const EditRateState.loading();
   }
 
-  Future<void> editrate({required RateInputEntity rateInput}) async {
+  Future<void> editRate({required RateInputEntity rateInput}) async {
     state = const EditRateState.loading();
 
     final result =
