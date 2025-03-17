@@ -1,4 +1,3 @@
-import 'package:ev_planner/features/sign_in/presentation/logic/sign_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -6,8 +5,11 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../shared/theme/ev_design_system.dart';
 import '../../../../shared/widgets/error_popup_widget.dart';
+import '../../../../shared/widgets/flushbar_widget.dart';
 import '../../../navigation/domain/entities/station_entity.dart';
 import '../../../navigation/presentation/logic/logic.dart';
+import '../../../sign_in/presentation/logic/logic.dart';
+import '../logic/delete_review/delete_review_provider.dart';
 
 class ReviewSectionWidget extends ConsumerStatefulWidget {
   const ReviewSectionWidget({super.key, required this.stationDetail});
@@ -33,10 +35,36 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
         .getStationDetail(stationId: widget.stationDetail.stationId);
   }
 
+  void deleteReview(reviewId) {
+    ref.read(deleteReviewProvider.notifier).deleteReview(reviewId: reviewId);
+  }
+
   @override
   Widget build(BuildContext context) {
     final userContext = ref.watch(userContextProvider);
     final stationDetailState = ref.watch(stationDetailProvider);
+
+    ref.listen(deleteReviewProvider, (previous, next) {
+      next.whenOrNull(
+        success: () {
+          context.pop();
+          getStationDetail();
+          showFlushbar(
+            context: context,
+            title: 'Delete Review Successful',
+            message: 'Your review has been successfully deleted.',
+            backgroundColor: Colors.green,
+          );
+        },
+        error: (_) {
+          errorPopupWidget(
+            context: context,
+            errorMessage: 'Delete review have failed, Please retry again',
+            buttonLabel: 'retry',
+          );
+        },
+      );
+    });
 
     return stationDetailState.when(
       data: (stationDetail) {
@@ -120,9 +148,8 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                                             leading: const Icon(Icons.delete,
                                                 color: Colors.red),
                                             title: const Text("Delete"),
-                                            onTap: () {
-                                              //TODO
-                                            },
+                                            onTap: () => deleteReview(
+                                                review?.reviewId ?? ''),
                                           ),
                                         ],
                                       );
