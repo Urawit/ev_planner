@@ -96,6 +96,9 @@ class PlugListWidgetState extends ConsumerState<PlugListWidget> {
                 }).toList() ??
                 [],
           ),
+          (widget.stationDetail.plugList?.length ?? 0) < 4
+              ? const SizedBox(height: 200)
+              : const SizedBox(height: 10),
         ],
       ),
     );

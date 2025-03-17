@@ -31,12 +31,12 @@ class StationDetailApiDataSource implements StationDetailIDataSource {
           availablePort: data['port_available'],
           reviewList: (data['reviewsList'] as List).map((reviewItem) {
             return ReviewModel(
-              reviewId: reviewItem['review_id'].toString(),
-              comment: reviewItem['comment'],
-              createDate: reviewItem['create_date'],
-              userId: reviewItem['user_id'].toString(),
-              stationId: reviewItem['station_id'].toString(),
-            );
+                reviewId: reviewItem['review_id'].toString(),
+                comment: reviewItem['comment'],
+                createDate: reviewItem['create_date'],
+                userId: reviewItem['user_id'].toString(),
+                stationId: reviewItem['station_id'].toString(),
+                username: reviewItem['username']);
           }).toList(),
           plugList: (data['plugList'] as List).map((plugItem) {
             return PlugModel(

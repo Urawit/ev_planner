@@ -9,7 +9,8 @@ import '../../../../shared/widgets/flushbar_widget.dart';
 import '../../../navigation/domain/entities/station_entity.dart';
 import '../../../navigation/presentation/logic/logic.dart';
 import '../../../sign_in/presentation/logic/logic.dart';
-import '../logic/delete_review/delete_review_provider.dart';
+import '../../data/models/post_review_input_model.dart';
+import '../logic/logic.dart';
 
 class ReviewSectionWidget extends ConsumerStatefulWidget {
   const ReviewSectionWidget({super.key, required this.stationDetail});
@@ -21,12 +22,21 @@ class ReviewSectionWidget extends ConsumerStatefulWidget {
 }
 
 class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
+  final TextEditingController _commentController = TextEditingController();
+  bool isInputNotNull = false;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getStationDetail();
     });
+    _commentController.addListener(_checkInputNull);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
   }
 
   void getStationDetail() {
@@ -35,15 +45,23 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
         .getStationDetail(stationId: widget.stationDetail.stationId);
   }
 
-  void deleteReview(reviewId) {
+  void deleteReview(String reviewId) {
     ref.read(deleteReviewProvider.notifier).deleteReview(reviewId: reviewId);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final userContext = ref.watch(userContextProvider);
-    final stationDetailState = ref.watch(stationDetailProvider);
+  void postReview(String stationId, String userId, String comment) {
+    ref.read(postReviewProvider.notifier).postReview(
+        postReviewInput: PostReviewInputModel(
+            stationId: stationId, userId: userId, comment: comment));
+  }
 
+  void _checkInputNull() {
+    setState(() {
+      isInputNotNull = _commentController.text.trim().isNotEmpty;
+    });
+  }
+
+  void listener() {
     ref.listen(deleteReviewProvider, (previous, next) {
       next.whenOrNull(
         success: () {
@@ -65,6 +83,35 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
         },
       );
     });
+
+    ref.listen(postReviewProvider, (previous, next) {
+      next.whenOrNull(
+        success: () {
+          getStationDetail();
+          showFlushbar(
+            context: context,
+            title: 'Post Review Successful',
+            message: 'Your review has been successfully posted.',
+            backgroundColor: Colors.green,
+          );
+        },
+        error: (_) {
+          errorPopupWidget(
+            context: context,
+            errorMessage: 'Post review have failed, Please retry again',
+            buttonLabel: 'retry',
+          );
+        },
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final userContext = ref.watch(userContextProvider);
+    final stationDetailState = ref.watch(stationDetailProvider);
+
+    listener();
 
     return stationDetailState.when(
       data: (stationDetail) {
@@ -121,7 +168,7 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                'review.username',
+                                review?.username ?? '',
                                 style: EVDesignSystem.textStyles.headline4,
                               ),
                             ),
@@ -191,6 +238,46 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                 child: Text("No reviews yet.",
                     style: TextStyle(color: Colors.grey)),
               ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 16, right: 16, top: 12, bottom: 24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _commentController,
+                      decoration: InputDecoration(
+                        hintText: 'Write a comment...',
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () => isInputNotNull
+                        ? postReview(stationDetail.stationId,
+                            userContext?.userId ?? '', _commentController.text)
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: EVDesignSystem.colors.orange,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.send,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         );
       },
@@ -201,7 +288,10 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
             context: context,
             errorMessage: 'Get review list has failed. Please retry again',
             buttonLabel: 'Retry',
-            onRetry: getStationDetail,
+            onRetry: () {
+              getStationDetail();
+              context.pop();
+            },
           );
         });
 

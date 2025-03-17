@@ -1,13 +1,13 @@
 import '../../domain/entities/review_entity.dart';
 
 class ReviewModel implements ReviewEntity {
-  const ReviewModel({
-    required this.reviewId,
-    required this.comment,
-    required this.createDate,
-    required this.userId,
-    required this.stationId,
-  });
+  const ReviewModel(
+      {required this.reviewId,
+      required this.comment,
+      required this.createDate,
+      required this.userId,
+      required this.stationId,
+      required this.username});
   @override
   final String reviewId;
   @override
@@ -18,4 +18,6 @@ class ReviewModel implements ReviewEntity {
   final String userId;
   @override
   final String stationId;
+  @override
+  final String username;
 }

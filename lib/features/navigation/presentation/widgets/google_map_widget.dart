@@ -51,7 +51,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
       //TODO DELETE THIS
       ref.read(signInProvider.notifier).signIn(
             signInInput:
-                SignInInputModel(email: 'admin@gmail.com', password: '1234'),
+                SignInInputModel(email: 'test@gmail.com', password: '1234'),
           );
     });
   }

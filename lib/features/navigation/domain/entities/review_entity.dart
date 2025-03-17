@@ -5,6 +5,7 @@ abstract class ReviewEntity {
     required this.createDate,
     required this.userId,
     required this.stationId,
+    required this.username,
   });
 
   final String reviewId;
@@ -12,4 +13,5 @@ abstract class ReviewEntity {
   final String createDate;
   final String userId;
   final String stationId;
+  final String username;
 }

@@ -30,10 +30,10 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.previousComment);
-    _controller.addListener(_checkIfTextChanged);
+    _controller.addListener(_checkIfAnyChanged);
   }
 
-  void _checkIfTextChanged() {
+  void _checkIfAnyChanged() {
     setState(() {
       isTextChanged =
           _controller.text != widget.previousComment && _controller.text != '';
@@ -42,7 +42,7 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
 
   @override
   void dispose() {
-    _controller.removeListener(_checkIfTextChanged);
+    _controller.removeListener(_checkIfAnyChanged);
     _controller.dispose();
     super.dispose();
   }
