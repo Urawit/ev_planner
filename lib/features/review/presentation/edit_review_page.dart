@@ -3,12 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../shared/widgets/widgets.dart';
+import '../../navigation/presentation/logic/station_detail/station_detail_provider.dart';
+import 'logic/logic.dart';
+
 class EditReviewPage extends ConsumerStatefulWidget {
   const EditReviewPage(
-      {super.key, required this.reviewId, required this.previousComment});
+      {super.key,
+      required this.reviewId,
+      required this.previousComment,
+      required this.stationId});
 
   final String reviewId;
   final String previousComment;
+  final String stationId;
 
   @override
   EditReviewPageState createState() => EditReviewPageState();
@@ -27,7 +35,8 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
 
   void _checkIfTextChanged() {
     setState(() {
-      isTextChanged = _controller.text != widget.previousComment;
+      isTextChanged =
+          _controller.text != widget.previousComment && _controller.text != '';
     });
   }
 
@@ -38,8 +47,40 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
     super.dispose();
   }
 
+  void editReview() {
+    ref
+        .read(editReviewProvider.notifier)
+        .editReview(reviewId: widget.reviewId, comment: _controller.text);
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(editReviewProvider, (previous, next) {
+      next.whenOrNull(
+        success: () {
+          context.pop();
+          context.pop();
+          ref
+              .read(stationDetailProvider.notifier)
+              .getStationDetail(stationId: widget.stationId);
+          showFlushbar(
+            context: context,
+            title: 'Edit Review Successful',
+            message: 'Your review has been successfully updated.',
+            backgroundColor: Colors.green,
+          );
+        },
+        error: (_) {
+          errorPopupWidget(
+            context: context,
+            errorMessage: 'Edit comment have failed, Please retry again',
+            buttonLabel: 'retry',
+            onRetry: editReview,
+          );
+        },
+      );
+    });
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 70, left: 16, right: 16),
@@ -59,7 +100,6 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
               ],
             ),
             const SizedBox(height: 30),
-            // TextBox for editing the comment
             TextField(
               controller: _controller,
               maxLines: 5,
@@ -68,6 +108,12 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.blue,
+                  ),
+                ),
+                labelStyle: const TextStyle(color: Colors.black),
               ),
             ),
             Padding(
@@ -77,8 +123,14 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    // Cancel button
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.blue,
+                        side: const BorderSide(color: Colors.blue),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
                       onPressed: () {
                         _controller.text = widget.previousComment;
                         setState(() {
@@ -88,15 +140,17 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
                       child: const Text('Cancel'),
                     ),
                     const SizedBox(width: 10),
-                    // Update button
                     ElevatedButton(
-                      onPressed: isTextChanged
-                          ? () {
-                              //TODO implement update
-                              // Handle update logic here
-                              print("Comment updated: ${_controller.text}");
-                            }
-                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            isTextChanged ? Colors.blue : Colors.grey,
+                        foregroundColor: Colors.white,
+                        side: BorderSide(
+                            color: isTextChanged ? Colors.blue : Colors.white),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                      onPressed: isTextChanged ? editReview : null,
                       child: const Text('Update'),
                     ),
                   ],

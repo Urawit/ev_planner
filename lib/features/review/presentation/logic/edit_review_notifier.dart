@@ -6,7 +6,7 @@ class EditReviewNotifier extends EVNotifier<EditReviewState> {
     return const EditReviewState.loading();
   }
 
-  Future<void> getStationList(
+  Future<void> editReview(
       {required String reviewId, required String comment}) async {
     state = const EditReviewState.loading();
 

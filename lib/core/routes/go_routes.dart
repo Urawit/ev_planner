@@ -70,9 +70,12 @@ class GoRoutes {
         final reviewId = state.pathParameters['reviewId'] ?? '';
         final previousComment =
             state.uri.queryParameters['previousComment'] ?? '';
+        final stationId = state.uri.queryParameters['stationId'] ?? '';
+
         return EditReviewPage(
           reviewId: reviewId,
           previousComment: previousComment,
+          stationId: stationId,
         );
       },
     ),
