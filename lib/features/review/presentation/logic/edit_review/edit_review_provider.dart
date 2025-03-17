@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../shared/notifier/ev_notifier.dart';
-import '../../data/data.dart';
-import '../../domain/domain.dart';
+import '../../../../../shared/notifier/ev_notifier.dart';
+import '../../../data/data.dart';
+import '../../../domain/domain.dart';
 import 'edit_review_state.dart';
 
 part 'edit_review_notifier.dart';

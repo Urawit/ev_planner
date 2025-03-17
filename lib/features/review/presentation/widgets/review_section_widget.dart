@@ -120,7 +120,9 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                                             leading: const Icon(Icons.delete,
                                                 color: Colors.red),
                                             title: const Text("Delete"),
-                                            onTap: () {},
+                                            onTap: () {
+                                              //TODO
+                                            },
                                           ),
                                         ],
                                       );

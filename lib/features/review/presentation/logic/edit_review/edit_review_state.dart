@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../shared/exception/exception.dart';
+import '../../../../../shared/exception/exception.dart';
 
 part 'edit_review_state.freezed.dart';
 
