@@ -5,7 +5,6 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../shared/theme/ev_design_system.dart';
 import '../../../../shared/widgets/error_popup_widget.dart';
-import '../../../../shared/widgets/flushbar_widget.dart';
 import '../../../navigation/domain/entities/station_entity.dart';
 import '../../../navigation/presentation/logic/logic.dart';
 import '../../../sign_in/presentation/logic/logic.dart';
@@ -64,12 +63,6 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
         success: () {
           context.pop();
           getStationDetail();
-          showFlushbar(
-            context: context,
-            title: 'Delete Review Successful',
-            message: 'Your review has been successfully deleted.',
-            backgroundColor: Colors.green,
-          );
         },
         error: (_) {
           errorPopupWidget(
@@ -85,12 +78,6 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
       next.whenOrNull(
         success: () {
           getStationDetail();
-          showFlushbar(
-            context: context,
-            title: 'Post Review Successful',
-            message: 'Your review has been successfully posted.',
-            backgroundColor: Colors.green,
-          );
         },
         error: (_) {
           errorPopupWidget(

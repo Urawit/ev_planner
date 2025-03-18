@@ -50,8 +50,8 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
 
       //TODO DELETE THIS
       ref.read(signInProvider.notifier).signIn(
-            signInInput:
-                SignInInputModel(email: 'test@gmail.com', password: '1234'),
+            signInInput: SignInInputModel(
+                email: 'admin@gmail.com', password: 'Chocolol1*'),
           );
     });
   }
@@ -125,16 +125,18 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
         accuracy: LocationAccuracy.high,
       ),
     );
-    if (mounted) {
-      setState(() {
-        _startingLocation = LatLng(position.latitude, position.longitude);
-        _getAddressFromLatLng(
-            _startingLocation!, _locationDescriptionController);
-        _updateMarker("startingLocation", _startingLocation!,
-            BitmapDescriptor.hueGreen, "Starting Location");
-        _moveCameraToLocation(_startingLocation!);
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _startingLocation = LatLng(position.latitude, position.longitude);
+          _getAddressFromLatLng(
+              _startingLocation!, _locationDescriptionController);
+          _updateMarker("startingLocation", _startingLocation!,
+              BitmapDescriptor.hueGreen, "Starting Location");
+          _moveCameraToLocation(_startingLocation!);
+        });
+      }
+    });
   }
 
   Future<void> _getAddressFromLatLng(
@@ -178,22 +180,23 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
     if (_lastTappedField.isEmpty) {
       return; // Prevent setting a marker if no field is selected
     }
+    if (mounted) {
+      setState(() {
+        if (_lastTappedField == "starting") {
+          _startingLocation = latLng;
+          _getAddressFromLatLng(latLng, _locationDescriptionController);
+          _updateMarker("startingLocation", latLng, BitmapDescriptor.hueGreen,
+              "Starting Location");
+        } else if (_lastTappedField == "destination") {
+          _getAddressFromLatLng(latLng, _destinationDescriptionController);
+          _updateMarker(
+              "destination", latLng, BitmapDescriptor.hueRed, "Destination");
+        }
 
-    setState(() {
-      if (_lastTappedField == "starting") {
-        _startingLocation = latLng;
-        _getAddressFromLatLng(latLng, _locationDescriptionController);
-        _updateMarker("startingLocation", latLng, BitmapDescriptor.hueGreen,
-            "Starting Location");
-      } else if (_lastTappedField == "destination") {
-        _getAddressFromLatLng(latLng, _destinationDescriptionController);
-        _updateMarker(
-            "destination", latLng, BitmapDescriptor.hueRed, "Destination");
-      }
-
-      // Reset selection after setting a marker
-      _lastTappedField = "";
-    });
+        // Reset selection after setting a marker
+        _lastTappedField = "";
+      });
+    }
   }
 
   void _onStartingLocationTap() {
