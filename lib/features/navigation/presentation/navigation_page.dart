@@ -15,7 +15,7 @@ class NavigationPage extends StatefulWidget {
 class NavigationPageState extends State<NavigationPage> {
   int currentPageIndex = 0;
   final List<Widget> _pages = [
-    const NavigationWidget(),
+    const GoogleMapWidget(),
     const BookmarkPage(),
     const SettingPage(),
   ];

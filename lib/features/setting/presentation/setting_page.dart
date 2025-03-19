@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../shared/features/vehicle_info/logic/vehicle_provider.dart';
 import '../../../shared/theme/ev_design_system.dart';
 import '../../../shared/widgets/widgets.dart';
-import '../../sign_in/data/models/sign_in_input_model.dart';
 import '../../sign_in/presentation/logic/sign_in_provider.dart';
 import '../data/models/edit_profile_input_model.dart';
 import 'logic/edit_profile_provider.dart';
@@ -119,7 +117,7 @@ class SettingPageState extends ConsumerState<SettingPage> {
 
     if (!passwordRegex.hasMatch(password) && password != '') {
       ref.read(editPasswordErrorProvider.notifier).state =
-          "Password must be 8-12 characters, with at least 1 uppercase letter, 1 number, and 1 special character.";
+          "Password must be 8-10 characters, with at least 1 uppercase letter, 1 number, and 1 special character.";
       isValid = false;
     } else {
       ref.read(editPasswordErrorProvider.notifier).state = null;

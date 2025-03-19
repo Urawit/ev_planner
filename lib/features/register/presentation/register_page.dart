@@ -101,7 +101,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
       isValid = false;
     } else if (!passwordRegex.hasMatch(password)) {
       ref.read(registerPasswordErrorProvider.notifier).state =
-          "Password must be 8-12 characters, with at least 1 uppercase letter, 1 number, and 1 special character.";
+          "Password must be 8-10 characters, with at least 1 uppercase letter, 1 number, and 1 special character.";
       isValid = false;
     } else {
       ref.read(registerPasswordErrorProvider.notifier).state = null;
