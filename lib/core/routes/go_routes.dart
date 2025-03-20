@@ -36,6 +36,14 @@ class GoRoutes {
         return const NavigationPage();
       },
     ),
+    //TODO WORK
+    // GoRoute(
+    //   path: '/route_selection',
+    //   builder: (context, state) {
+    //     final tripModel = state.extra as ;
+    //     return ReviewPage(stationDetail: stationDetail);
+    //   },
+    // ),
     GoRoute(
       path: '/station-detail/:stationId',
       builder: (context, state) {

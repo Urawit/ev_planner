@@ -1,21 +1,21 @@
 import '../../data/models/models.dart';
 
 abstract class StationEntity {
-  const StationEntity({
-    required this.stationId,
-    this.lat,
-    this.long,
-    this.stationName,
-    this.openTime,
-    this.closedTime,
-    this.address,
-    this.averageRating,
-    this.rateCount,
-    this.availablePort,
-    this.reviewList,
-    this.ratingList,
-    this.plugList,
-  });
+  const StationEntity(
+      {required this.stationId,
+      this.lat,
+      this.long,
+      this.stationName,
+      this.openTime,
+      this.closedTime,
+      this.address,
+      this.averageRating,
+      this.rateCount,
+      this.availablePort,
+      this.reviewList,
+      this.ratingList,
+      this.plugList,
+      this.distanceFromStartToStation});
 
   final String stationId;
   final double? lat;
@@ -30,4 +30,5 @@ abstract class StationEntity {
   final List<ReviewModel>? reviewList;
   final List<RatingModel>? ratingList;
   final List<PlugModel>? plugList;
+  final double? distanceFromStartToStation;
 }

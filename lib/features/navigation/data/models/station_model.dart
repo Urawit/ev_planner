@@ -2,21 +2,21 @@ import '../../domain/entities/station_entity.dart';
 import 'models.dart';
 
 class StationModel implements StationEntity {
-  const StationModel({
-    required this.stationId,
-    this.lat,
-    this.long,
-    this.stationName,
-    this.openTime,
-    this.closedTime,
-    this.address,
-    this.averageRating,
-    this.rateCount,
-    this.availablePort,
-    this.reviewList,
-    this.ratingList,
-    this.plugList,
-  });
+  const StationModel(
+      {required this.stationId,
+      this.lat,
+      this.long,
+      this.stationName,
+      this.openTime,
+      this.closedTime,
+      this.address,
+      this.averageRating,
+      this.rateCount,
+      this.availablePort,
+      this.reviewList,
+      this.ratingList,
+      this.plugList,
+      this.distanceFromStartToStation});
   @override
   final String stationId;
 
@@ -55,4 +55,7 @@ class StationModel implements StationEntity {
 
   @override
   final List<PlugModel>? plugList;
+
+  @override
+  final double? distanceFromStartToStation;
 }
