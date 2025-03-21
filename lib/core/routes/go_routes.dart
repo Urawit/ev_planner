@@ -1,11 +1,12 @@
-import 'package:ev_planner/features/review/presentation/edit_review_page.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/navigation/domain/entities/station_entity.dart';
 import '../../features/navigation/presentation/navigation_page.dart';
+import '../../features/navigation/presentation/result_without_charges_page.dart';
 import '../../features/navigation/presentation/station_detail_page.dart';
 import '../../features/register/presentation/register_page.dart';
 import '../../features/bookmark/presentation/bookmark_page.dart';
+import '../../features/review/presentation/edit_review_page.dart';
 import '../../features/review/presentation/review_page.dart';
 import '../../features/setting/presentation/setting_page.dart';
 import '../../features/sign_in/presentation/sign_in_page.dart';
@@ -36,14 +37,13 @@ class GoRoutes {
         return const NavigationPage();
       },
     ),
-    //TODO WORK
-    // GoRoute(
-    //   path: '/route_selection',
-    //   builder: (context, state) {
-    //     final tripModel = state.extra as ;
-    //     return ReviewPage(stationDetail: stationDetail);
-    //   },
-    // ),
+    GoRoute(
+      path: '/result-without-charges',
+      builder: (context, state) {
+        final data = state.extra as ResultWithoutChargesPageDataModel;
+        return ResultWithoutChargePage(data: data);
+      },
+    ),
     GoRoute(
       path: '/station-detail/:stationId',
       builder: (context, state) {

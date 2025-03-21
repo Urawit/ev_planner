@@ -87,7 +87,7 @@ class PlugListWidgetState extends ConsumerState<PlugListWidget> {
                           const SizedBox(
                             width: 20,
                           ),
-                          Text(plug.price,
+                          Text('${plug.price} B / kWh + ${plug.price} B / hour',
                               style: const TextStyle(fontSize: 13)),
                         ],
                       ),

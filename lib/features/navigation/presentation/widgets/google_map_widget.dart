@@ -19,8 +19,10 @@ import '../../../sign_in/presentation/logic/logic.dart';
 import '../../data/data.dart';
 import '../../domain/entities/entities.dart';
 import '../logic/calculate_route/calculate_route_provider.dart';
+import '../logic/get_route_list/get_route_list_provider.dart';
 import '../logic/logic.dart';
 import '../logic/result_planner_provider.dart';
+import '../result_without_charges_page.dart';
 import 'widgets.dart';
 
 class GoogleMapWidget extends ConsumerStatefulWidget {
@@ -41,6 +43,11 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
   //TODO might be used
 
   // Set<Polyline> _polylines = {};
+
+  List<String> stationIdsOnRoute = [];
+  double? travelDurationInHours;
+  double? totalDistance;
+
   List<LatLng> _routePolylineCoordinates = [];
 
   final TextEditingController _locationDescriptionController =
@@ -123,7 +130,6 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
               'Please enable location permissions in your device settings to proceed.',
           buttonLabel: 'Acknowledge',
           onRetry: () {
-            Navigator.of(context).pop();
             context.go('/error');
           },
         );
@@ -233,22 +239,12 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
       return;
     }
 
+    stationIdsOnRoute.clear();
+
     String origin =
         "${_startingLocation?.latitude},${_startingLocation?.longitude}";
     String destination =
         "${_destinationLocation?.latitude},${_destinationLocation?.longitude}";
-
-    //TODO DELETE
-
-    // ref.read(startLatLongProvider.notifier).state = LatLng(
-    //   _startingLocation?.latitude ?? 0.0,
-    //   _startingLocation?.longitude ?? 0.0,
-    // );
-
-    // ref.read(destinationLatLongProvider.notifier).state = LatLng(
-    //   _destinationLocation?.latitude ?? 0.0,
-    //   _destinationLocation?.longitude ?? 0.0,
-    // );
 
     String url =
         "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=AIzaSyBQ3FCQRjQbRTulu_9fir3d1NI-iOi15_g&mode=driving";
@@ -261,12 +257,23 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
         final points =
             decodedResponse['routes'][0]['overview_polyline']['points'];
 
+        // Extract the distance (in meters) from the API response
+        int distanceInMeters =
+            decodedResponse['routes'][0]['legs'][0]['distance']['value'];
+
+        // Convert the distance to kilometers
+        totalDistance = distanceInMeters / 1000.0;
+
         // Decode and store the route polyline for later use
         _routePolylineCoordinates = _decodePolyline(points);
-        _findStationsOnRoute(_routePolylineCoordinates);
-        //TODO might be used
 
-        // _drawStoredPolyline();
+        // calculate time it's take from direction api
+        int durationInSeconds =
+            decodedResponse['routes'][0]['legs'][0]['duration']['value'];
+        // Convert seconds to hours (fractional hours)
+        travelDurationInHours = durationInSeconds / 3600.0;
+
+        _findStationsOnRoute(_routePolylineCoordinates);
       }
     }
   }
@@ -303,9 +310,33 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
     return polylineCoordinates;
   }
 
-  void _findStationsOnRoute(List<LatLng> polylinePoints) {
-    const double thresholdDistance = 0.5; // 0.5 km (500 meters)
+  Future<double> _getDrivingDistance(
+      double startLat, double startLon, double endLat, double endLon) async {
+    String origin = "$startLat,$startLon";
+    String destination = "$endLat,$endLon";
 
+    // URL for Google Directions API
+    String url =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=AIzaSyBQ3FCQRjQbRTulu_9fir3d1NI-iOi15_g&mode=driving";
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final decodedResponse = json.decode(response.body);
+      if (decodedResponse['routes'].isNotEmpty) {
+        // Get the distance from the response
+        int distanceInMeters =
+            decodedResponse['routes'][0]['legs'][0]['distance']['value'];
+        // Return distance in kilometers
+        return distanceInMeters / 1000.0;
+      }
+    }
+
+    return 0.0;
+  }
+
+  Future<void> _findStationsOnRoute(List<LatLng> polylinePoints) async {
+    const double thresholdDistance = 0.5; // 0.5 km (500 meters)
     List<StationDistanceEntity> stationDistances = [];
 
     for (var station in ref.read(stationProvider).maybeWhen(
@@ -314,8 +345,8 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
         )) {
       LatLng stationLatLng = LatLng(station.lat ?? 0, station.long ?? 0);
 
-      // !calculate how far the station is from the starting point
-      double distanceFromStartToStation = _calculateDistance(
+      // ! Now use the Google Directions API to calculate distance from start to station
+      double distanceFromStartToStation = await _getDrivingDistance(
           _startingLocation?.latitude ?? 0,
           _startingLocation?.longitude ?? 0,
           stationLatLng.latitude,
@@ -332,17 +363,11 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
               distanceFromStartToStation: distanceFromStartToStation,
             ),
           );
+          stationIdsOnRoute.add(station.stationId.toString());
           break;
         }
       }
     }
-
-    double totalDistance = _calculateDistance(
-      _startingLocation?.latitude ?? 0,
-      _startingLocation?.longitude ?? 0,
-      _destinationLocation?.latitude ?? 0,
-      _destinationLocation?.longitude ?? 0,
-    );
 
     // Sort by distance from start
     stationDistances.sort((a, b) =>
@@ -355,24 +380,28 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
     final batteryPercentage = ref.read(currentBatteryProvider);
 
     ref.read(calculateRouteProvider.notifier).getCalculateRouteList(
-        calculateRouteInput: CalculateRouteInputModel(
+          calculateRouteInput: CalculateRouteInputModel(
             modelId: userContext?.carModelId ?? '',
-            totalDistance: totalDistance,
+            totalDistance: totalDistance ?? 0,
             currentBattery: batteryPercentage?.toInt() ?? 0,
-            distanceList: stationDistances));
+            distanceList: stationDistances,
+          ),
+        );
   }
 
   double _calculateDistance(
-      double lat1, double lon1, double lat2, double lon2) {
+      double startLat, double startLon, double endLat, double endLon) {
     const double R = 6371; // Radius of Earth in km
-    double dLat = _degreesToRadians(lat2 - lat1);
-    double dLon = _degreesToRadians(lon2 - lon1);
+    double dLat = _degreesToRadians(endLat - startLat);
+    double dLon = _degreesToRadians(endLon - startLon);
+
     double a = sin(dLat / 2) * sin(dLat / 2) +
-        cos(_degreesToRadians(lat1)) *
-            cos(_degreesToRadians(lat2)) *
+        cos(_degreesToRadians(startLat)) *
+            cos(_degreesToRadians(endLat)) *
             sin(dLon / 2) *
             sin(dLon / 2);
     double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
     return R * c; // Distance in km
   }
 
@@ -380,22 +409,6 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
     return degrees * pi / 180;
   }
 
-  //TODO might be used
-
-  // void _drawStoredPolyline() {
-  //   if (_routePolylineCoordinates.isEmpty) {
-  //     return;
-  //   }
-
-  //   setState(() {
-  //     _polylines.add(Polyline(
-  //       polylineId: const PolylineId("route"),
-  //       color: Colors.blue,
-  //       width: 5,
-  //       points: _routePolylineCoordinates,
-  //     ));
-  //   });
-  // }
   void listener() {
     ref.listen<StationState>(stationProvider, (previous, next) {
       next.whenOrNull(data: (stations) {
@@ -407,7 +420,6 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
               'The Server have failed to get stations data. Please refresh the page',
           buttonLabel: 'Refresh',
           onRetry: () {
-            Navigator.of(context).pop();
             _getStationList();
           },
         );
@@ -417,16 +429,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
     ref.listen(calculateRouteProvider, (previous, next) {
       next.whenOrNull(
         success: (tripId) {
-          // TODO work
-          // ref.read()
-          //   Todo delete
-
-          // showFlushbar(
-          //   context: context,
-          //   title: 'Edit Review Successful',
-          //   message: 'Your review has been successfully updated.',
-          //   backgroundColor: Colors.green,
-          // );
+          ref.read(getRouteListProvider.notifier).getRouteList(tripId: tripId);
         },
         error: (_) {
           errorPopupWidget(
@@ -435,6 +438,66 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
             buttonLabel: 'retry',
             onRetry: _onPressedPlanTrip,
           );
+        },
+      );
+    });
+
+    ref.listen(getRouteListProvider, (previous, next) {
+      next.whenOrNull(
+        data: (data) {
+          if (data.routeList.isEmpty) {
+            // * couldn't reach destination or any station
+            errorPopupWidget(
+              context: context,
+              errorMessage:
+                  'Unfortunately, the trip is unavailable due to the current battery and the number of stations present.',
+              buttonLabel: 'retry',
+              onRetry: () {
+                setState(() {
+                  _lastTappedField = ""; // Unselect destination
+                  _destinationLocation = null; // Clear the selected destination
+                  _destinationDescriptionController
+                      .clear(); // Clear destination text field
+                  _markers.removeWhere(
+                      (marker) => marker.markerId.value == "destination");
+                });
+              },
+            );
+          } else {
+            // * can reach destination without charges
+            if (data.routeList.length == 1 &&
+                data.routeList[0].chargingInfoList.isEmpty) {
+              context.push(
+                '/result-without-charges',
+                extra: ResultWithoutChargesPageDataModel(
+                    startLatLong: LatLng(
+                      _startingLocation?.latitude ?? 0,
+                      _startingLocation?.longitude ?? 0,
+                    ),
+                    destLatLong: LatLng(
+                      _destinationLocation?.latitude ?? 0,
+                      _destinationLocation?.longitude ?? 0,
+                    ),
+                    polylinePoints: _routePolylineCoordinates,
+                    stationIdList: stationIdsOnRoute,
+                    travelDurationInHours: travelDurationInHours ?? 0,
+                    remainingBatteryAtDestination:
+                        data.routeList[0].remainingBatteryAtDestination.toInt(),
+                    totalDistance: totalDistance ?? 0),
+              );
+            } else {
+              // * can reach destination with charges
+              print("reachWithCharges");
+            }
+          }
+        },
+        error: (_) {
+          errorPopupWidget(
+              context: context,
+              errorMessage:
+                  'Getting route list from database have failed, Please retry again',
+              buttonLabel: 'retry',
+              onRetry: () => _onPressedPlanTrip);
         },
       );
     });

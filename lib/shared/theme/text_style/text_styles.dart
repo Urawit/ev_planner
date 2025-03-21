@@ -1,3 +1,4 @@
+import 'package:ev_planner/shared/theme/ev_design_system.dart';
 import 'package:flutter/material.dart';
 
 class TextStyles {
@@ -21,4 +22,10 @@ class TextStyles {
       fontSize: 17, fontWeight: FontWeight.normal, color: Colors.black);
   TextStyle get description2 => const TextStyle(
       fontSize: 17, fontWeight: FontWeight.normal, color: Colors.green);
+  TextStyle get description3 => const TextStyle(
+      fontSize: 14, fontWeight: FontWeight.normal, color: Colors.blueGrey);
+  TextStyle get description4 => TextStyle(
+      fontSize: 17,
+      fontWeight: FontWeight.bold,
+      color: EVDesignSystem.colors.orange);
 }

@@ -149,7 +149,6 @@ class ReviewPageState extends ConsumerState<ReviewPage> {
             buttonLabel: 'Retry',
             onRetry: () {
               getStationDetail();
-              context.pop();
             },
           );
         });

@@ -41,6 +41,7 @@ Future<void> errorPopupWidget({
                 ),
                 onPressed: () {
                   if (onRetry != null) {
+                    Navigator.of(context).pop();
                     onRetry();
                   } else {
                     Navigator.of(context).pop();
