@@ -23,6 +23,7 @@ import '../logic/get_route_list/get_route_list_provider.dart';
 import '../logic/logic.dart';
 import '../logic/result_planner_provider.dart';
 import '../result_without_charges_page.dart';
+import '../route_selection_page.dart';
 import 'widgets.dart';
 
 class GoogleMapWidget extends ConsumerStatefulWidget {
@@ -487,7 +488,8 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
               );
             } else {
               // * can reach destination with charges
-              print("reachWithCharges");
+              context.push('/route-selection',
+                  extra: RouteSelectionPageDataModel(tripResultData: data));
             }
           }
         },

@@ -204,7 +204,7 @@ class NavigationInputWidgetState extends ConsumerState<NavigationInputWidget> {
                   children: [
                     Image.asset("assets/images/plan_trip_icon.png", scale: 4),
                     const SizedBox(width: 10),
-                    const Text('plan the trip'),
+                    const Text('Plan the trip'),
                   ],
                 ))
           ],

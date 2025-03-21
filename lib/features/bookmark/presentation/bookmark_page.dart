@@ -83,9 +83,14 @@ class BookmarkPageState extends ConsumerState<BookmarkPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            bookmark.stationName,
-                            style: EVDesignSystem.textStyles.headline2,
+                          SizedBox(
+                            width: 250,
+                            child: Text(
+                              bookmark.stationName,
+                              style: EVDesignSystem.textStyles.headline2,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                           SizedBox(
                             width: 275,

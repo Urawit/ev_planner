@@ -111,9 +111,14 @@ class StationDetailBodyWidgetState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.stationDetail.stationName ?? '',
-                        style: EVDesignSystem.textStyles.headline2,
+                      SizedBox(
+                        width: 250,
+                        child: Text(
+                          widget.stationDetail.stationName ?? '',
+                          style: EVDesignSystem.textStyles.headline2,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       SizedBox(
                         width: 250,

@@ -6,7 +6,8 @@ class ChargingInfoModel implements ChargingInfoEntity {
       required this.chargeTo,
       required this.stationName,
       required this.energyUsedWhenCharge,
-      required this.stationId});
+      required this.stationId,
+      this.plugId});
 
   @override
   final double batteryAtStation;
@@ -18,4 +19,6 @@ class ChargingInfoModel implements ChargingInfoEntity {
   final int energyUsedWhenCharge;
   @override
   final int stationId;
+  @override
+  final int? plugId;
 }
