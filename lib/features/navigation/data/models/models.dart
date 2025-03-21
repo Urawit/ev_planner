@@ -3,6 +3,7 @@ export 'calculate_route_input_model.dart';
 export 'charging_info_model.dart';
 export 'plug_model.dart';
 export 'rating_model.dart';
+export 'result_input_model.dart';
 export 'review_model.dart';
 export 'route_model.dart';
 export 'station_distance_model.dart';

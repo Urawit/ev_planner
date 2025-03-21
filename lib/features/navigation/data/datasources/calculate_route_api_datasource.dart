@@ -39,11 +39,11 @@ class CalculateRouteApiDataSource implements CalculateRouteIDataSource {
         return tripId;
       } else {
         throw const AnyException(
-            ErrorMessageModel(errorMessage: "Failed to get bookmark list"));
+            ErrorMessageModel(errorMessage: "Failed to calculate route list"));
       }
     } catch (e) {
       throw AnyException(
-          ErrorMessageModel(errorMessage: "Error getting bookmark list: $e"));
+          ErrorMessageModel(errorMessage: "Error calculating route list: $e"));
     }
   }
 }
