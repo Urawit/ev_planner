@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../shared/features/vehicle_info/logic/vehicle_provider.dart';
 import '../../../shared/theme/ev_design_system.dart';
@@ -77,6 +78,10 @@ class SettingPageState extends ConsumerState<SettingPage> {
 
     displayNameController.text = userContext?.displayName ?? '';
     emailController.text = userContext?.email ?? '';
+  }
+
+  void logout() {
+    context.go('/sign-in');
   }
 
   void validation() {
@@ -308,6 +313,27 @@ class SettingPageState extends ConsumerState<SettingPage> {
                           ),
                           onPressed: validation,
                           child: const Text('Apply')),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: logout,
+                          child: const Text('Logout')),
                     ),
                   ],
                 ),
