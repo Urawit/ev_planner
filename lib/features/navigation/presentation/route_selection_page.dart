@@ -130,7 +130,7 @@ class RouteSelectionPageState extends ConsumerState<RouteSelectionPage> {
               style:
                   const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
           Text(
-              "🔋 Charge: ${chargingInfo.batteryAtStation.toStringAsFixed(1)}% → ${chargingInfo.chargeTo.toStringAsFixed(1)}%",
+              "🔋 Charge: ${chargingInfo.batteryAtStation?.toStringAsFixed(1)}% → ${chargingInfo.chargeTo?.toStringAsFixed(1)}%",
               style: const TextStyle(fontSize: 13)),
           Text("🔺 Energy Used: ${chargingInfo.energyUsedWhenCharge}%",
               style: const TextStyle(fontSize: 13)),

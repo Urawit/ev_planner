@@ -1,6 +1,7 @@
 export 'bookmark_input_model.dart';
 export 'calculate_route_input_model.dart';
 export 'charging_info_model.dart';
+export 'get_result_model.dart';
 export 'plug_model.dart';
 export 'rating_model.dart';
 export 'result_input_model.dart';

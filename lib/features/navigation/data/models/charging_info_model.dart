@@ -2,17 +2,20 @@ import '../../domain/entities/charging_info_entity.dart';
 
 class ChargingInfoModel implements ChargingInfoEntity {
   const ChargingInfoModel(
-      {required this.batteryAtStation,
-      required this.chargeTo,
+      {this.batteryAtStation,
+      this.chargeTo,
       required this.stationName,
       required this.energyUsedWhenCharge,
       required this.stationId,
-      this.plugId});
+      this.plugId,
+      this.chargingTime,
+      this.lat,
+      this.long});
 
   @override
-  final double batteryAtStation;
+  final double? batteryAtStation;
   @override
-  final double chargeTo;
+  final double? chargeTo;
   @override
   final String stationName;
   @override
@@ -21,4 +24,10 @@ class ChargingInfoModel implements ChargingInfoEntity {
   final int stationId;
   @override
   final int? plugId;
+  @override
+  final double? chargingTime;
+  @override
+  final double? lat;
+  @override
+  final double? long;
 }

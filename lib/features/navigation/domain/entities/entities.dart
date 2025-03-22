@@ -1,6 +1,7 @@
 export 'bookmark_input_entity.dart';
 export 'calculate_route_input_entity.dart';
 export 'charging_info_entity.dart';
+export 'get_result_entity.dart';
 export 'plug_entity.dart';
 export 'rating_entity.dart';
 export 'result_input_entity.dart';
