@@ -7,7 +7,7 @@ import '../../domain/entities/entities.dart';
 import 'result_idatasource.dart';
 
 class ResultApiDataSource implements ResultIDataSource {
-  final String baseUrl = "http://10.0.2.2:8080/api/trips/save";
+  final String baseUrl = "http://10.0.2.2:8080/api/result/save";
 
   @override
   Future<int> calculateResult({required ResultInputEntity resultInput}) async {

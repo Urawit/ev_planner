@@ -35,7 +35,13 @@ class RouteSelectionPageState extends ConsumerState<RouteSelectionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: EVDesignSystem.colors.grey,
-      appBar: AppBar(title: const Text("Choose a Charging Plan")),
+      appBar: AppBar(
+        title: const Padding(
+          padding: EdgeInsets.only(left: 14.0, top: 15),
+          child: Text("Choose a Charging Plan"),
+        ),
+        toolbarHeight: 70,
+      ),
       body: Column(
         children: [
           const SizedBox(
