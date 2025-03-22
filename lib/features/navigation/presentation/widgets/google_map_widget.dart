@@ -200,7 +200,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
         if (_lastTappedField == "starting") {
           _startingLocation = latLng;
           _getAddressFromLatLng(latLng, _locationDescriptionController);
-          _updateMarker("startingLocation", latLng, BitmapDescriptor.hueGreen,
+          _updateMarker("startingLocation", latLng, BitmapDescriptor.hueBlue,
               "Starting Location");
           ref.read(startLatLongProvider.notifier).state = latLng;
         } else if (_lastTappedField == "destination") {

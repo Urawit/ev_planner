@@ -159,9 +159,10 @@ class PlugSelectionPageState extends ConsumerState<PlugSelectionPage> {
     return Scaffold(
       backgroundColor: EVDesignSystem.colors.grey,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Padding(
           padding: EdgeInsets.only(left: 12, top: 15),
-          child: Text("Select a Plug for Charging"),
+          child: Text("Select a plug for charging"),
         ),
         toolbarHeight: 70,
       ),
@@ -226,84 +227,89 @@ class PlugSelectionPageState extends ConsumerState<PlugSelectionPage> {
                                   fontSize: 14, color: Colors.grey),
                             ),
                             const SizedBox(height: 8.0),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 48.0),
-                              child: Wrap(
-                                spacing: 8.0,
-                                runSpacing: 8.0,
-                                children: (station.plugList ?? []).map((plug) {
-                                  bool isSelected = selectedPlugs.containsKey(
-                                          int.tryParse(station.stationId) ??
-                                              -1) &&
-                                      selectedPlugs[
-                                              int.tryParse(station.stationId) ??
-                                                  -1]?['plugId'] ==
-                                          int.tryParse(plug.plugId);
+                            Wrap(
+                              spacing: 8.0,
+                              runSpacing: 8.0,
+                              children: (station.plugList ?? [])
+                                  .where((plug) =>
+                                      plug.status != 'unavailable' &&
+                                      plug.status != 'outofservice')
+                                  .map((plug) {
+                                bool isSelected = selectedPlugs.containsKey(
+                                        int.tryParse(station.stationId) ??
+                                            -1) &&
+                                    selectedPlugs[
+                                            int.tryParse(station.stationId) ??
+                                                -1]?['plugId'] ==
+                                        int.tryParse(plug.plugId);
 
-                                  return GestureDetector(
-                                    onTap: () {
-                                      plug.status == 'unavailable' ||
-                                              plug.status == 'outofservice'
-                                          ? {}
-                                          : onPlugSelected(
-                                              int.tryParse(station.stationId) ??
-                                                  0,
-                                              int.tryParse(plug.plugId) ?? 0,
-                                              chargingInfo.energyUsedWhenCharge,
-                                            );
-                                    },
-                                    child: Card(
-                                      color: isSelected
-                                          ? Colors.blue
-                                          : Colors.white,
-                                      elevation: isSelected ? 4.0 : 2.0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        side: BorderSide(
-                                          color: isSelected
-                                              ? Colors.blue
-                                              : Colors.grey,
-                                          width: isSelected ? 2.0 : 1.0,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(12.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              "Plug Type: ${plug.plugType}",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: isSelected
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                            Text(
-                                              "Status: ${plug.status}",
-                                              style: TextStyle(
-                                                color: isSelected
-                                                    ? Colors.white70
-                                                    : Colors.black54,
-                                              ),
-                                            ),
-                                            Text(
-                                              "Price: Price: ${plug.price} B / kWh + ${plug.price} B / hour",
-                                              style: TextStyle(
-                                                color: isSelected
-                                                    ? Colors.white70
-                                                    : Colors.black54,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                return GestureDetector(
+                                  onTap: () {
+                                    plug.status == 'unavailable' ||
+                                            plug.status == 'outofservice'
+                                        ? {}
+                                        : onPlugSelected(
+                                            int.tryParse(station.stationId) ??
+                                                0,
+                                            int.tryParse(plug.plugId) ?? 0,
+                                            chargingInfo.energyUsedWhenCharge,
+                                          );
+                                  },
+                                  child: Card(
+                                    color:
+                                        isSelected ? Colors.blue : Colors.white,
+                                    elevation: isSelected ? 4.0 : 2.0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      side: BorderSide(
+                                        color: isSelected
+                                            ? Colors.blue
+                                            : Colors.grey,
+                                        width: isSelected ? 2.0 : 1.0,
                                       ),
                                     ),
-                                  );
-                                }).toList(),
-                              ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                "Plug Type: ${plug.plugType}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: isSelected
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Status: ${plug.status}",
+                                                style: TextStyle(
+                                                  color: isSelected
+                                                      ? Colors.white70
+                                                      : Colors.black54,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Price: Price: ${plug.price} B / kWh + ${plug.price} B / hour",
+                                                style: TextStyle(
+                                                  color: isSelected
+                                                      ? Colors.white70
+                                                      : Colors.black54,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             ),
                           ],
                         ),

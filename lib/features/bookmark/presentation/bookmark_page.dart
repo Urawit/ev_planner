@@ -67,6 +67,7 @@ class BookmarkPageState extends ConsumerState<BookmarkPage> {
               final bookmark = bookmarks[index];
 
               return Card(
+                color: Colors.white,
                 margin: const EdgeInsets.symmetric(vertical: 8.0),
                 elevation: 2,
                 shape: RoundedRectangleBorder(

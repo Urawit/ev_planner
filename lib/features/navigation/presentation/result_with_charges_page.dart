@@ -545,7 +545,7 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  const Text('Google Map',
+                                  const Text('Google Map\'s',
                                       style: TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.normal,

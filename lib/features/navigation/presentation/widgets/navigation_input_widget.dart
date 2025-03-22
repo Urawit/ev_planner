@@ -105,7 +105,7 @@ class NavigationInputWidgetState extends ConsumerState<NavigationInputWidget> {
                   TextSpan(
                     children: [
                       const TextSpan(
-                        text: 'Brand: ',
+                        text: 'Brand : ',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, fontSize: 15),
                       ),
@@ -124,7 +124,7 @@ class NavigationInputWidgetState extends ConsumerState<NavigationInputWidget> {
                   TextSpan(
                     children: [
                       const TextSpan(
-                        text: 'Model: ',
+                        text: 'Model : ',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, fontSize: 15),
                       ),
@@ -146,7 +146,7 @@ class NavigationInputWidgetState extends ConsumerState<NavigationInputWidget> {
               children: [
                 SizedBox(width: 6),
                 Text(
-                  'Select your current car battery',
+                  'Set your car\'s current battery level',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],

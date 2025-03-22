@@ -46,9 +46,10 @@ class RouteSelectionPageState extends ConsumerState<RouteSelectionPage> {
     return Scaffold(
       backgroundColor: EVDesignSystem.colors.grey,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: const Padding(
           padding: EdgeInsets.only(left: 14.0, top: 15),
-          child: Text("Choose a Charging Plan"),
+          child: Text("Choose a charging plan"),
         ),
         toolbarHeight: 70,
       ),
@@ -126,7 +127,7 @@ class RouteSelectionPageState extends ConsumerState<RouteSelectionPage> {
               ...route.chargingInfoList.map(_buildChargingInfo).toList(),
               const Divider(),
               Text(
-                  "🔋 Battery on Arrival: ${route.remainingBatteryAtDestination.toStringAsFixed(1)}%",
+                  "🔋 Battery on Arrival: ${route.remainingBatteryAtDestination.toStringAsFixed(0)}%",
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500)),
             ],
@@ -146,9 +147,10 @@ class RouteSelectionPageState extends ConsumerState<RouteSelectionPage> {
               style:
                   const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
           Text(
-              "🔋 Charge: ${chargingInfo.batteryAtStation?.toStringAsFixed(1)}% → ${chargingInfo.chargeTo?.toStringAsFixed(1)}%",
+              "🔋 Charge from: ${chargingInfo.batteryAtStation?.toStringAsFixed(0)}% to ${chargingInfo.chargeTo?.toStringAsFixed(0)}%",
               style: const TextStyle(fontSize: 13)),
-          Text("🔺 Energy Used: ${chargingInfo.energyUsedWhenCharge}%",
+          Text(
+              "🔺 Energy Used: ${chargingInfo.energyUsedWhenCharge.toStringAsFixed(0)}%",
               style: const TextStyle(fontSize: 13)),
         ],
       ),

@@ -12,8 +12,8 @@ class TextStyles {
       const TextStyle(fontSize: 17, fontWeight: FontWeight.bold);
   TextStyle get headline4 =>
       const TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
-  TextStyle get normal1 =>
-      const TextStyle(fontSize: 17, fontWeight: FontWeight.normal);
+  TextStyle get normal1 => const TextStyle(
+      fontSize: 17, fontWeight: FontWeight.normal, color: Colors.black);
   TextStyle get normal2 => const TextStyle(
       fontSize: 17, fontWeight: FontWeight.normal, color: Colors.blueGrey);
   TextStyle get normal3 => const TextStyle(

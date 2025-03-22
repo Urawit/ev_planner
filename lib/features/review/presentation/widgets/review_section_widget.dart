@@ -140,10 +140,6 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                           backgroundImage:
                               AssetImage("assets/images/Avatar.png")
                                   as ImageProvider,
-                          //TODO ADD PROFILE IMAGE
-                          // backgroundImage: review.profileImageUrl != null
-                          //     ? NetworkImage(review.profileImageUrl!)
-                          //     : const AssetImage("assets/images/default_profile.png") as ImageProvider,
                         ),
                         const SizedBox(width: 10),
                         Expanded(
@@ -196,7 +192,7 @@ class ReviewSectionWidgetState extends ConsumerState<ReviewSectionWidget> {
                       ),
                       child: Text(
                         review?.comment ?? '',
-                        style: EVDesignSystem.textStyles.normal2,
+                        style: EVDesignSystem.textStyles.normal1,
                       ),
                     ),
                     Padding(

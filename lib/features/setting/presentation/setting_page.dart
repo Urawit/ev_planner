@@ -180,13 +180,13 @@ class SettingPageState extends ConsumerState<SettingPage> {
     });
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 60),
               Text("SETTING PAGE", style: EVDesignSystem.textStyles.headline3),
-              //TODO implement profile image
               const SizedBox(height: 60),
               CustomTextField(
                   controller: displayNameController,
@@ -212,7 +212,6 @@ class SettingPageState extends ConsumerState<SettingPage> {
                 obscureProvider: editObscureConfirmPasswordProvider,
               ),
               const SizedBox(height: 24),
-
               SizedBox(
                 width: 327,
                 child: DropdownButtonFormField<String>(
