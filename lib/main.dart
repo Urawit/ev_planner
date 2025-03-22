@@ -19,4 +19,4 @@ class MyApp extends StatelessWidget {
 }
 
 final GoRouter _router =
-    GoRouter(initialLocation: '/navigation', routes: GoRoutes.routes);
+    GoRouter(initialLocation: '/sign-in', routes: GoRoutes.routes);
