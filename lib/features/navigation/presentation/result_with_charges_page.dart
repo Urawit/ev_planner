@@ -72,12 +72,15 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
     ref.read(stationProvider.notifier).getStationList();
   }
 
-  Future<BitmapDescriptor> _getCustomIcon(bool isStationInRoute) async {
-    final ByteData data = await rootBundle.load(
-      isStationInRoute
-          ? 'assets/images/default_evolt_node_icon.png'
-          : 'assets/images/out_of_bound_node_icon.png',
-    );
+  Future<BitmapDescriptor> _getCustomIcon(
+      bool isStationInRoute, bool isChargingStop) async {
+    final String iconPath = isChargingStop
+        ? 'assets/images/charged_evolt_node_icon.png'
+        : (isStationInRoute
+            ? 'assets/images/default_evolt_node_icon.png'
+            : 'assets/images/out_of_bound_node_icon.png');
+
+    final ByteData data = await rootBundle.load(iconPath);
     final Uint8List originalBytes = data.buffer.asUint8List();
 
     final ui.Codec codec =
@@ -94,8 +97,12 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
     for (var station in stations) {
       bool isStationInRoute =
           widget.data.stationIdList.contains(station.stationId);
+      bool isChargingStop = widget.data.result.chargingInfoList.any(
+          (chargingInfo) =>
+              chargingInfo.stationId.toString() == station.stationId);
+
       final BitmapDescriptor customIcon =
-          await _getCustomIcon(isStationInRoute);
+          await _getCustomIcon(isStationInRoute, isChargingStop);
 
       _markers.add(
         Marker(
@@ -276,7 +283,6 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
 
       LatLng previousPoint = widget.data.startLatLong;
 
-      // Draw polylines sequentially
       for (LatLng station in stationPoints) {
         List<LatLng> segment =
             await _fetchRoutePolyline(previousPoint, station);
@@ -284,7 +290,6 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
         previousPoint = station;
       }
 
-      // Draw last segment from last station to destination
       List<LatLng> lastSegment =
           await _fetchRoutePolyline(previousPoint, widget.data.destLatLong);
       routePoints.addAll(lastSegment);
