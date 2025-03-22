@@ -147,7 +147,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
           _getAddressFromLatLng(
               _startingLocation!, _locationDescriptionController);
           _updateMarker("startingLocation", _startingLocation!,
-              BitmapDescriptor.hueGreen, "Starting Location");
+              BitmapDescriptor.hueBlue, "Starting Location");
           _moveCameraToLocation(_startingLocation!);
         });
       }

@@ -125,7 +125,7 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
         position: widget.data.startLatLong,
         infoWindow: const InfoWindow(title: "Starting point"),
         icon: BitmapDescriptor.defaultMarkerWithHue(
-            BitmapDescriptor.hueGreen), // Correct usage
+            BitmapDescriptor.hueBlue), // Correct usage
       ),
     );
 
