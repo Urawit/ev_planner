@@ -8,7 +8,7 @@ import '../models/models.dart';
 import 'get_result_idatasource.dart';
 
 class GetResultApiDataSource implements GetResultIDataSource {
-  final String baseUrl = "http://localhost:8080/api/result/";
+  final String baseUrl = "http://10.0.2.2:8080/api/result/";
 
   @override
   Future<GetResultEntity> getResult({required int resultId}) async {
@@ -26,7 +26,7 @@ class GetResultApiDataSource implements GetResultIDataSource {
               batteryAtStation: null,
               chargeTo: null,
               stationName: chargingInfoItem['stationName'],
-              energyUsedWhenCharge: chargingInfoItem['energy_used_when_charge'],
+              energyUsedWhenCharge: chargingInfoItem['energyUsedWhenCharge'],
               stationId: chargingInfoItem['stationId'],
               chargingTime: chargingInfoItem['chargingTime'],
               lat: chargingInfoItem['lat'],

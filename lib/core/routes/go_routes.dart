@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/navigation/domain/entities/station_entity.dart';
 import '../../features/navigation/presentation/navigation_page.dart';
 import '../../features/navigation/presentation/plug_selection_page.dart';
+import '../../features/navigation/presentation/result_with_charges_page.dart';
 import '../../features/navigation/presentation/result_without_charges_page.dart';
 import '../../features/navigation/presentation/route_selection_page.dart';
 import '../../features/navigation/presentation/station_detail_page.dart';
@@ -44,6 +45,13 @@ class GoRoutes {
       builder: (context, state) {
         final data = state.extra as ResultWithoutChargesPageDataModel;
         return ResultWithoutChargePage(data: data);
+      },
+    ),
+    GoRoute(
+      path: '/result-with-charges',
+      builder: (context, state) {
+        final data = state.extra as ResultWithChargesPageDataModel;
+        return ResultWithChargePage(data: data);
       },
     ),
     GoRoute(

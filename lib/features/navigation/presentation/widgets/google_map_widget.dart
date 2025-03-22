@@ -364,7 +364,6 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
               distanceFromStartToStation: distanceFromStartToStation,
             ),
           );
-          stationIdsOnRoute.add(station.stationId.toString());
           break;
         }
       }
@@ -373,6 +372,10 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
     // Sort by distance from start
     stationDistances.sort((a, b) =>
         (a.distanceFromStartToStation).compareTo(b.distanceFromStartToStation));
+
+    for (var stationDistance in stationDistances) {
+      stationIdsOnRoute.add(stationDistance.stationId);
+    }
 
     // Update provider state
     ref.read(stationDistanceProvider.notifier).state = stationDistances;
@@ -488,8 +491,22 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
               );
             } else {
               // * can reach destination with charges
-              context.push('/route-selection',
-                  extra: RouteSelectionPageDataModel(tripResultData: data));
+              context.push(
+                '/route-selection',
+                extra: RouteSelectionPageDataModel(
+                    tripResultData: data,
+                    startLatLong: LatLng(
+                      _startingLocation?.latitude ?? 0,
+                      _startingLocation?.longitude ?? 0,
+                    ),
+                    destLatLong: LatLng(
+                      _destinationLocation?.latitude ?? 0,
+                      _destinationLocation?.longitude ?? 0,
+                    ),
+                    stationIdList: stationIdsOnRoute,
+                    travelDurationInHours: travelDurationInHours ?? 0,
+                    totalDistance: totalDistance ?? 0),
+              );
             }
           }
         },

@@ -2,6 +2,7 @@ import 'package:ev_planner/features/navigation/presentation/plug_selection_page.
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
 import '../domain/entities/trip_result_entity.dart';
@@ -9,11 +10,20 @@ import '../domain/entities/route_entity.dart';
 import '../domain/entities/charging_info_entity.dart';
 
 class RouteSelectionPageDataModel {
-  const RouteSelectionPageDataModel({
-    required this.tripResultData,
-  });
+  const RouteSelectionPageDataModel(
+      {required this.tripResultData,
+      required this.startLatLong,
+      required this.destLatLong,
+      required this.stationIdList,
+      required this.travelDurationInHours,
+      required this.totalDistance});
 
   final TripResultEntity tripResultData;
+  final LatLng startLatLong;
+  final LatLng destLatLong;
+  final List<String> stationIdList;
+  final double travelDurationInHours;
+  final double totalDistance;
 }
 
 class RouteSelectionPage extends ConsumerStatefulWidget {
@@ -70,8 +80,14 @@ class RouteSelectionPageState extends ConsumerState<RouteSelectionPage> {
               onPressed: () {
                 context.push('/plug-selection',
                     extra: PlugSelectionPageDataModel(
-                        tripResultData: widget.data.tripResultData,
-                        routeId: selectedRoute?.routeId ?? 0));
+                      tripResultData: widget.data.tripResultData,
+                      routeId: selectedRoute?.routeId ?? 0,
+                      startLatLong: widget.data.startLatLong,
+                      destLatLong: widget.data.destLatLong,
+                      stationIdList: widget.data.stationIdList,
+                      travelDurationInHours: widget.data.travelDurationInHours,
+                      totalDistance: widget.data.totalDistance,
+                    ));
               },
               child: const Text("Confirm Route"),
             ),

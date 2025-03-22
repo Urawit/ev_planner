@@ -1,23 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../shared/theme/ev_design_system.dart';
 import '../../../shared/widgets/error_popup_widget.dart';
 import '../../sign_in/presentation/logic/sign_in_provider.dart';
 import '../data/models/charging_info_model.dart';
 import '../data/models/result_input_model.dart';
+import '../domain/entities/route_entity.dart';
 import '../domain/entities/trip_result_entity.dart';
+import 'logic/get_result/get_result_provider.dart';
 import 'logic/result/result_provider.dart';
 import 'logic/station_list/station_list_provider.dart';
+import 'result_with_charges_page.dart';
 
 class PlugSelectionPageDataModel {
-  const PlugSelectionPageDataModel({
-    required this.tripResultData,
-    required this.routeId,
-  });
+  const PlugSelectionPageDataModel(
+      {required this.tripResultData,
+      required this.routeId,
+      required this.startLatLong,
+      required this.destLatLong,
+      required this.stationIdList,
+      required this.travelDurationInHours,
+      required this.totalDistance});
 
   final TripResultEntity tripResultData;
   final int routeId;
+
+  final LatLng startLatLong;
+  final LatLng destLatLong;
+  final List<String> stationIdList;
+  final double travelDurationInHours;
+  final double totalDistance;
 }
 
 class PlugSelectionPage extends ConsumerStatefulWidget {
@@ -31,6 +46,8 @@ class PlugSelectionPage extends ConsumerStatefulWidget {
 
 class PlugSelectionPageState extends ConsumerState<PlugSelectionPage> {
   Map<int, Map<String, dynamic>> selectedPlugs = {};
+  double? remainingBatteryAtDestination;
+  RouteEntity? specificSelectedRoute;
 
   @override
   void initState() {
@@ -79,11 +96,65 @@ class PlugSelectionPageState extends ConsumerState<PlugSelectionPage> {
         );
   }
 
+  void listener() {
+    ref.listen(resultProvider, (previous, next) {
+      next.whenOrNull(
+        data: (resultId) {
+          ref.read(getResultProvider.notifier).getResult(resultId: resultId);
+        },
+        error: (error) {
+          errorPopupWidget(
+            context: context,
+            errorMessage: 'Planning feature have failed, Please retry again',
+            buttonLabel: 'retry',
+            onRetry: onConfirm,
+          );
+        },
+      );
+    });
+
+    ref.listen(getResultProvider, (previous, next) {
+      next.whenOrNull(
+        data: (data) {
+          final selectRoute = specificSelectedRoute;
+          if (selectRoute != null) {
+            context.push(
+              '/result-with-charges',
+              extra: ResultWithChargesPageDataModel(
+                  startLatLong: widget.data.startLatLong,
+                  destLatLong: widget.data.destLatLong,
+                  stationIdList: widget.data.stationIdList,
+                  travelDurationInHours: widget.data.travelDurationInHours,
+                  remainingBatteryAtDestination:
+                      remainingBatteryAtDestination ?? 0,
+                  totalDistance: widget.data.totalDistance,
+                  result: data,
+                  specificSelectedRoute: selectRoute),
+            );
+          }
+        },
+        error: (error) {
+          errorPopupWidget(
+            context: context,
+            errorMessage: 'Getting result have failed, Please retry again',
+            buttonLabel: 'retry',
+          );
+        },
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    listener();
+
     final stationListState = ref.watch(stationListProvider);
     final selectedRoute = widget.data.tripResultData.routeList
         .firstWhere((route) => route.routeId == widget.data.routeId);
+
+    specificSelectedRoute = selectedRoute;
+
+    remainingBatteryAtDestination = selectedRoute.remainingBatteryAtDestination;
 
     return Scaffold(
       backgroundColor: EVDesignSystem.colors.grey,
@@ -96,10 +167,20 @@ class PlugSelectionPageState extends ConsumerState<PlugSelectionPage> {
       ),
       body: stationListState.when(
         data: (stations) {
-          final selectedStations = stations
-              .where((station) => selectedRoute.chargingInfoList.any(
-                  (info) => info.stationId.toString() == station.stationId))
-              .toList();
+          final selectedStations = stations.where((station) {
+            return selectedRoute.chargingInfoList.any(
+              (chargingInfo) =>
+                  chargingInfo.stationId.toString() == station.stationId,
+            );
+          }).toList();
+
+          selectedStations.sort((a, b) {
+            int indexA = selectedRoute.chargingInfoList
+                .indexWhere((info) => info.stationId.toString() == a.stationId);
+            int indexB = selectedRoute.chargingInfoList
+                .indexWhere((info) => info.stationId.toString() == b.stationId);
+            return indexA.compareTo(indexB);
+          });
 
           return Column(
             children: [
