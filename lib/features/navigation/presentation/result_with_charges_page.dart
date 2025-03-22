@@ -349,7 +349,7 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               height: _isMinimized
-                  ? 70
+                  ? 55
                   : MediaQuery.of(context).size.height * 0.425,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -555,6 +555,9 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
                             ),
                           ],
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       )
                     ]
                   ],

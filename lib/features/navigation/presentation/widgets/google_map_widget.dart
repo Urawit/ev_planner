@@ -335,7 +335,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
   }
 
   Future<void> _findStationsOnRoute(List<LatLng> polylinePoints) async {
-    const double thresholdDistance = 0.5; // 0.5 km (500 meters)
+    const double thresholdDistance = 10;
     List<StationDistanceEntity> stationDistances = [];
 
     for (var station in ref.read(stationProvider).maybeWhen(
