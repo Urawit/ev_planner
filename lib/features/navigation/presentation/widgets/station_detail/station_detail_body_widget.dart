@@ -94,7 +94,7 @@ class StationDetailBodyWidgetState
             (bookmark) => bookmark.stationId == widget.stationDetail.stationId)
         : null;
 
-    final isSaved = bookmarks.isNotEmpty ? true : false;
+    final isSaved = bookmark != null;
 
     return Container(
       color: Colors.white,
@@ -147,8 +147,7 @@ class StationDetailBodyWidgetState
                       if (isSaved) {
                         await ref
                             .read(deleteBookmarkProvider.notifier)
-                            .deleteBookmark(
-                                bookmarkId: bookmark?.bookmarkId ?? '');
+                            .deleteBookmark(bookmarkId: bookmark.bookmarkId);
                       } else {
                         if (userContext == null) return;
                         await ref
