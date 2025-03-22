@@ -41,10 +41,6 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
   String _lastTappedField = "destination";
   final Set<Marker> _markers = {};
 
-  //TODO might be used
-
-  // Set<Polyline> _polylines = {};
-
   List<String> stationIdsOnRoute = [];
   double? travelDurationInHours;
   double? totalDistance;
@@ -147,6 +143,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
       if (mounted) {
         setState(() {
           _startingLocation = LatLng(position.latitude, position.longitude);
+          ref.read(startLatLongProvider.notifier).state = _startingLocation;
           _getAddressFromLatLng(
               _startingLocation!, _locationDescriptionController);
           _updateMarker("startingLocation", _startingLocation!,
@@ -205,6 +202,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
           _getAddressFromLatLng(latLng, _locationDescriptionController);
           _updateMarker("startingLocation", latLng, BitmapDescriptor.hueGreen,
               "Starting Location");
+          ref.read(startLatLongProvider.notifier).state = latLng;
         } else if (_lastTappedField == "destination") {
           _destinationLocation = latLng;
           _getAddressFromLatLng(latLng, _destinationDescriptionController);

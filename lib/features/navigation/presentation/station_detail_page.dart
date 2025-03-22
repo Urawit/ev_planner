@@ -2,10 +2,12 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'logic/result_planner_provider.dart';
 import 'logic/station_detail/station_detail.dart';
 import 'widgets/station_detail/station_detail_body_widget.dart';
 
@@ -64,63 +66,78 @@ class StationDetailPageState extends ConsumerState<StationDetailPage> {
   Widget build(BuildContext context) {
     final stationDetailState = ref.watch(stationDetailProvider);
 
+    LatLng? startLatLong = ref.watch(startLatLongProvider);
+
     return stationDetailState.when(
-      data: (stationDetail) => Scaffold(
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.white,
-                    height: 80,
+      data: (stationDetail) {
+        double? distance = 0;
+        if (stationDetail.lat != null && stationDetail.long != null) {
+          distance = Geolocator.distanceBetween(
+                startLatLong?.latitude ?? 0,
+                startLatLong?.longitude ?? 0,
+                stationDetail.lat ?? 0,
+                stationDetail.long ?? 0,
+              ) /
+              1000;
+        }
+        return Scaffold(
+          body: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      height: 80,
+                    ),
+                  ),
+                ],
+              ),
+              const Divider(
+                color: Colors.grey,
+                height: 1,
+              ),
+              SizedBox(
+                height: 180,
+                child: GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng((stationDetail.lat ?? 0) + 0.00015,
+                        stationDetail.long ?? 0),
+                    zoom: 18.0,
+                  ),
+                  markers: {
+                    Marker(
+                        markerId: MarkerId(widget.stationId),
+                        position: LatLng(
+                            stationDetail.lat ?? 0, stationDetail.long ?? 0),
+                        icon: customIcon ?? BitmapDescriptor.defaultMarker),
+                  },
+                  scrollGesturesEnabled: false,
+                  zoomGesturesEnabled: false,
+                  rotateGesturesEnabled: false,
+                  tiltGesturesEnabled: false,
+                ),
+              ),
+              const Divider(
+                color: Colors.grey,
+                height: 1,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: StationDetailBodyWidget(
+                    stationDetail: stationDetail,
+                    distance: distance,
+                    onPressedBackButton: () {
+                      context.pop();
+                    },
                   ),
                 ),
-              ],
-            ),
-            const Divider(
-              color: Colors.grey,
-              height: 1,
-            ),
-            SizedBox(
-              height: 180,
-              child: GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng((stationDetail.lat ?? 0) + 0.00015,
-                      stationDetail.long ?? 0),
-                  zoom: 18.0,
-                ),
-                markers: {
-                  Marker(
-                      markerId: MarkerId(widget.stationId),
-                      position: LatLng(
-                          stationDetail.lat ?? 0, stationDetail.long ?? 0),
-                      icon: customIcon ?? BitmapDescriptor.defaultMarker),
-                },
-                scrollGesturesEnabled: false,
-                zoomGesturesEnabled: false,
-                rotateGesturesEnabled: false,
-                tiltGesturesEnabled: false,
               ),
-            ),
-            const Divider(
-              color: Colors.grey,
-              height: 1,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: StationDetailBodyWidget(
-                  stationDetail: stationDetail,
-                  onPressedBackButton: () {
-                    context.pop();
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error) =>
           const Center(child: Text("Error loading station details")),

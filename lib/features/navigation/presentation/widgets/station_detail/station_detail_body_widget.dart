@@ -17,10 +17,12 @@ class StationDetailBodyWidget extends ConsumerStatefulWidget {
     super.key,
     required this.onPressedBackButton,
     required this.stationDetail,
+    required this.distance,
   });
 
   final StationEntity stationDetail;
   final VoidCallback onPressedBackButton;
+  final double distance;
 
   @override
   StationDetailBodyWidgetState createState() => StationDetailBodyWidgetState();
@@ -202,7 +204,7 @@ class StationDetailBodyWidgetState
                               scale: 6.0),
                         ),
                         const SizedBox(width: 15),
-                        Text('5.57 km',
+                        Text('${widget.distance.toStringAsFixed(2)} km',
                             style: EVDesignSystem.textStyles.description1),
                       ],
                     ),
@@ -216,6 +218,25 @@ class StationDetailBodyWidgetState
                           style: EVDesignSystem.textStyles.description2,
                         ),
                       ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 2),
+                      child: Row(
+                        children: [
+                          Image.asset("assets/images/time.png", scale: 4.8),
+                          const SizedBox(width: 16),
+                          Text(
+                            '${widget.stationDetail.openTime}',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

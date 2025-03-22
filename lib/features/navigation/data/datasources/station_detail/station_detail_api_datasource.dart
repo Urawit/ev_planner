@@ -21,8 +21,7 @@ class StationDetailApiDataSource implements StationDetailIDataSource {
         return StationModel(
           stationId: data['stationId'].toString(),
           stationName: data['station_name'],
-          openTime: data['opentime'],
-          closedTime: data['closetime'],
+          openTime: data['openhours'],
           lat: data['lat'],
           long: data['longitude'],
           address: data['address'],

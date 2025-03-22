@@ -569,16 +569,22 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
 
   Widget _buildChargeAtSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(
+        vertical: 10.0,
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Charging Stops",
-            style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: EVDesignSystem.colors.orange),
+          Row(
+            children: [
+              const SizedBox(width: 18),
+              Text(
+                "Charging Stops",
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: EVDesignSystem.colors.orange),
+              ),
+            ],
           ),
           const SizedBox(height: 4),
           ...widget.data.result.chargingInfoList.map((chargingInfo) {
@@ -589,9 +595,10 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
                   stationName: '', energyUsedWhenCharge: 0, stationId: 0),
             );
 
-            return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
+            return Row(
+              children: [
+                const SizedBox(width: 71),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -604,7 +611,9 @@ class ResultWithChargePageState extends ConsumerState<ResultWithChargePage> {
                     Text(
                         "Charging Time: ${formatDuration(chargingInfo.chargingTime ?? 0)}"),
                   ],
-                ));
+                ),
+              ],
+            );
           }).toList(),
         ],
       ),
