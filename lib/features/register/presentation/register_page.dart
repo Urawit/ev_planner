@@ -179,6 +179,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
     });
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
