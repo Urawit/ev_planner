@@ -136,6 +136,14 @@ class SettingPageState extends ConsumerState<SettingPage> {
       ref.read(editConfirmPasswordErrorProvider.notifier).state = null;
     }
 
+    if (selectedBrand != null && selectedModel == null) {
+      ref.read(editCarModelErrorProvider.notifier).state =
+          "Please select a car model";
+      isValid = false;
+    } else {
+      ref.read(editCarModelErrorProvider.notifier).state = null;
+    }
+
     if (isValid) {
       final finalDisplayName =
           displayName.isEmpty ? (userContext?.displayName ?? '') : displayName;
@@ -215,6 +223,7 @@ class SettingPageState extends ConsumerState<SettingPage> {
               SizedBox(
                 width: 327,
                 child: DropdownButtonFormField<String>(
+                  dropdownColor: Colors.white,
                   value: selectedBrand,
                   items: vehicleState.when(
                     data: (vehicleList) {
@@ -255,6 +264,7 @@ class SettingPageState extends ConsumerState<SettingPage> {
                 SizedBox(
                   width: 327,
                   child: DropdownButtonFormField<String>(
+                    dropdownColor: Colors.white,
                     value: selectedModel,
                     items: vehicleState.when(
                       data: (vehicleList) {

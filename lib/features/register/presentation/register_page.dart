@@ -237,6 +237,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
             SizedBox(
               width: 327,
               child: DropdownButtonFormField<String>(
+                dropdownColor: Colors.white,
                 value: selectedBrand,
                 items: vehicleState.when(
                   data: (vehicleList) {
@@ -278,6 +279,7 @@ class RegisterPageState extends ConsumerState<RegisterPage> {
               SizedBox(
                 width: 327,
                 child: DropdownButtonFormField<String>(
+                  dropdownColor: Colors.white,
                   value: selectedModel,
                   items: vehicleState.when(
                     data: (vehicleList) {

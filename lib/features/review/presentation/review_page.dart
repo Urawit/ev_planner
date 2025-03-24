@@ -43,6 +43,7 @@ class ReviewPageState extends ConsumerState<ReviewPage> {
     return stationDetailState.when(
       data: (stationDetail) {
         return Scaffold(
+          backgroundColor: Colors.white,
           body: Column(
             children: [
               Padding(

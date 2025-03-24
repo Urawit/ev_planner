@@ -30,6 +30,7 @@ Future<void> showRateDialog(BuildContext context, StationEntity stationDetail,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        backgroundColor: Colors.white,
         contentPadding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         content: Stack(

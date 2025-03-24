@@ -82,6 +82,7 @@ class EditReviewPageState extends ConsumerState<EditReviewPage> {
     });
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(top: 70, left: 16, right: 16),
         child: Column(

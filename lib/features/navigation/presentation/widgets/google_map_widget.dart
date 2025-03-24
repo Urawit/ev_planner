@@ -66,7 +66,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
 
       ref.read(signInProvider.notifier).signIn(
             signInInput: const SignInInputModel(
-                email: 'admin@gmail.com', password: 'Chocolol1*'),
+                email: 'admin@gmail.com', password: 'Abcdef1*'),
           );
     });
   }
