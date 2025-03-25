@@ -246,7 +246,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
         "${_destinationLocation?.latitude},${_destinationLocation?.longitude}";
 
     String url =
-        "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=AIzaSyBQ3FCQRjQbRTulu_9fir3d1NI-iOi15_g&mode=driving";
+        "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=NOTHING";
 
     final response = await http.get(Uri.parse(url));
 
@@ -316,7 +316,7 @@ class GoogleMapWidgetState extends ConsumerState<GoogleMapWidget>
 
     // URL for Google Directions API
     String url =
-        "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=AIzaSyBQ3FCQRjQbRTulu_9fir3d1NI-iOi15_g&mode=driving";
+        "https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=$destination&key=NOTHING";
 
     final response = await http.get(Uri.parse(url));
 
